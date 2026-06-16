@@ -1,0 +1,244 @@
+/* ==========================================================================
+   EV Charge - Global Stylesheet (global.css)
+   ========================================================================== */
+
+/* הגדרות בסיסיות לכל האתר */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #A3D9FF; /* הרקע הכחול/תכלת המוכר שלכם */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* מבטיח חישוב גדלים נכון לכל האלמנטים בפרויקט */
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+/* ==========================================================================
+   💥 ה-Header המשותף לכל העמודים
+   ========================================================================== */
+.main-header {
+  padding: 20px 10px;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #2170FF;
+}
+
+.logo-img {
+  height: 40px;
+  width: auto;
+  display: block;
+  mix-blend-mode: multiply;
+}
+
+.nav-icons {
+  margin: 0;
+  color: #1A365D;
+  font-size: 1.2em;
+  display: flex;
+  gap: 15px;
+}
+
+.nav-icons span {
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.nav-icons span:hover {
+  color: #2170FF;
+}
+
+/* ==========================================================================
+   📦 אזור התוכן המרכזי והכותרות של המסכים
+   ========================================================================== */
+.main-content {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 10px 20px 40px;
+  min-height: calc(100vh - 180px); /* שומר שהפוטר יידחף למטה */
+}
+
+.welcome-section {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #1A365D;
+}
+
+.welcome-section h1 {
+  font-size: 2.2em;
+  font-weight: 800;
+  margin-bottom: 5px;
+}
+
+.welcome-section p {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #1A365D;
+  margin-top: 0;
+}
+
+/* כפתורי ניווט חזרה (כמו חזרה לתפריט ראשי) */
+.back-navigation {
+  max-width: 600px;
+  margin: 0 auto 15px auto;
+  padding: 0 10px;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: #1A365D;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 5px 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.back-btn:hover {
+  color: #2170FF;
+}
+
+/* ==========================================================================
+   📋 בסיס מבנה הטפסים המשותף (Figma Style Upgrade)
+   ========================================================================== */
+.booking-form {
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+  box-shadow: none;
+  padding: 25px 10px 10px;
+  margin-top: 20px;
+  gap: 28px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 1.35em;
+  font-weight: 800;
+  color: #000000;
+  margin-bottom: 10px;
+}
+
+.form-group input,
+.form-group select {
+  height: 58px;
+  border-radius: 999px; /* פינות עגולות מלאות לפי הפיגמה */
+  border: none;
+  background-color: #ffffff;
+  text-align: center;
+  font-size: 1.25em;
+  font-weight: 700;
+  color: #000000;
+  padding: 0 20px;
+}
+
+.form-group input::placeholder {
+  color: #7d9bc4;
+  font-weight: 500;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: 3px solid #2170FF;
+}
+
+/* כפתור שליחה כללי של טפסים */
+.submit-btn {
+  height: 60px;
+  background-color: #2170FF;
+  color: #ffffff;
+  border: none;
+  border-radius: 999px;
+  font-size: 1.4em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  margin-top: 15px;
+  box-shadow: 0 4px 10px rgba(33, 112, 255, 0.3);
+}
+
+.submit-btn:hover {
+  background-color: #1A56CC;
+}
+
+.submit-btn:active {
+  transform: scale(0.98);
+}
+
+/* Class גלובלי להסתרת אלמנטים (תקני, ללא style פנימי) */
+.hidden {
+  display: none !important;
+}
+
+/* ==========================================================================
+   👣 ה-Footer המשותף לכל העמודים
+   ========================================================================== */
+.main-footer {
+  background-color: transparent;
+  padding: 20px 10px;
+  margin-top: auto;
+}
+
+.footer-content {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+  color: #1A365D;
+  font-weight: bold;
+  font-size: 0.95em;
+}
+
+/* ==========================================================================
+   📱 התאמה למובייל ומסכים שונים (Media Queries הגלובלי שלכם)
+   ========================================================================== */
+@media (max-width: 480px) {
+  .logo {
+    font-size: 1.3em;
+  }
+  
+  .welcome-section h1 {
+    font-size: 1.8em;
+  }
+
+  .form-group label {
+    font-size: 1.15em;
+  }
+
+  .form-group input,
+  .form-group select {
+    height: 50px;
+    font-size: 1.1em;
+  }
+
+  .submit-btn {
+    height: 52px;
+    font-size: 1.20em;
+  }
+}

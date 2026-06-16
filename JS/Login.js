@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded',()=> {
         else if(!passwordPattern.test(user_password))
         {
             errorBox.classList.remove('hidden');
-            errorBox.innerHTML = "Please enter valid password";
+            errorBox.innerHTML = "<strong>Invalid Password:</strong><br>Must be at least 8 characters, with an uppercase letter, a lowercase letter, and a number.";
         }
         else{
             location.href="MainMenu.html";
