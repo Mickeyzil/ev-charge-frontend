@@ -1,24 +1,15 @@
-/* ==========================================================================
-   EV Charge - Global Stylesheet (global.css)
-   ========================================================================== */
-
-/* הגדרות בסיסיות לכל האתר */
 body {
   font-family: 'Arial', sans-serif;
-  background-color: #A3D9FF; /* הרקע הכחול/תכלת המוכר שלכם */
+  background-color: #A3D9FF; 
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* מבטיח חישוב גדלים נכון לכל האלמנטים בפרויקט */
 *, *::before, *::after {
   box-sizing: inherit;
 }
 
-/* ==========================================================================
-   💥 ה-Header המשותף לכל העמודים
-   ========================================================================== */
 .main-header {
   padding: 20px 10px;
 }
@@ -68,20 +59,19 @@ body {
   color: #2170FF;
 }
 
-/* ==========================================================================
-   📦 אזור התוכן המרכזי והכותרות של המסכים
-   ========================================================================== */
 .main-content {
   max-width: 600px;
   margin: 0 auto;
   padding: 10px 20px 40px;
-  min-height: calc(100vh - 180px); /* שומר שהפוטר יידחף למטה */
+  min-height: calc(100vh - 180px); 
 }
 
 .welcome-section {
   text-align: center;
   margin-bottom: 25px;
   color: #1A365D;
+  background-color: transparent; 
+  padding: 10px;
 }
 
 .welcome-section h1 {
@@ -97,7 +87,6 @@ body {
   margin-top: 0;
 }
 
-/* כפתורי ניווט חזרה (כמו חזרה לתפריט ראשי) */
 .back-navigation {
   max-width: 600px;
   margin: 0 auto 15px auto;
@@ -121,9 +110,6 @@ body {
   color: #2170FF;
 }
 
-/* ==========================================================================
-   📋 בסיס מבנה הטפסים המשותף (Figma Style Upgrade)
-   ========================================================================== */
 .booking-form {
   display: flex;
   flex-direction: column;
@@ -149,7 +135,7 @@ body {
 .form-group input,
 .form-group select {
   height: 58px;
-  border-radius: 999px; /* פינות עגולות מלאות לפי הפיגמה */
+  border-radius: 999px; 
   border: none;
   background-color: #ffffff;
   text-align: center;
@@ -169,7 +155,6 @@ body {
   outline: 3px solid #2170FF;
 }
 
-/* כפתור שליחה כללי של טפסים */
 .submit-btn {
   height: 60px;
   background-color: #2170FF;
@@ -192,14 +177,10 @@ body {
   transform: scale(0.98);
 }
 
-/* Class גלובלי להסתרת אלמנטים (תקני, ללא style פנימי) */
 .hidden {
   display: none !important;
 }
 
-/* ==========================================================================
-   👣 ה-Footer המשותף לכל העמודים
-   ========================================================================== */
 .main-footer {
   background-color: transparent;
   padding: 20px 10px;
@@ -215,9 +196,6 @@ body {
   font-size: 0.95em;
 }
 
-/* ==========================================================================
-   📱 התאמה למובייל ומסכים שונים (Media Queries הגלובלי שלכם)
-   ========================================================================== */
 @media (max-width: 480px) {
   .logo {
     font-size: 1.3em;
