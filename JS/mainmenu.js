@@ -2,22 +2,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Edit Profile
     const profileBtn = document.getElementById("profile-btn");
+
     if (profileBtn) {
         profileBtn.addEventListener("click", () => {
-            // בעתיד מעבר ל-Profile
+            // Future Profile Page
         });
     }
 
     // Favorites
     const favoritesBtn = document.getElementById("favorites-btn");
+
     if (favoritesBtn) {
         favoritesBtn.addEventListener("click", () => {
-            // בעתיד מעבר ל-Favorites
+            window.location.href = "Favorites.html";
         });
     }
 
-    // Find nearby stations
+    // Find Nearby Stations
     const stationsBtn = document.getElementById("stations-btn");
+
     if (stationsBtn) {
         stationsBtn.addEventListener("click", () => {
             window.location.href = "NearbyStations.html";
@@ -26,17 +29,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Map View
     const mapBtn = document.getElementById("map-btn");
+
     if (mapBtn) {
         mapBtn.addEventListener("click", () => {
-            // בעתיד מעבר למפה
+            // Future Map Page
         });
     }
 
     // Log Out
     const logoutBtn = document.getElementById("logout-btn");
+
     if (logoutBtn) {
         logoutBtn.addEventListener("click", () => {
-            window.location.href = "Login.html";
+
+            const confirmLogout = confirm(
+                "Are you sure you want to log out?"
+            );
+
+            if (confirmLogout) {
+                localStorage.clear();
+                window.location.href = "Login.html";
+            }
+
         });
     }
 

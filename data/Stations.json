@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Modiin Maccabim Reut",
+    "statusColor": "#D4AF37",
+    "available": "2/3",
+    "power": "320 kW",
+    "price": "₪2.50/kWh",
+    "connectors": ["CCS", "Type 2"],
+    "amenities": ["WiFi", "cafe"]
+  },
+  {
+    "name": "Haifa",
+    "statusColor": "#388E3C",
+    "available": "3/3",
+    "power": "150 kW",
+    "price": "₪2.00/kWh",
+    "connectors": ["CCS", "Type 2"],
+    "amenities": ["WiFi", "cafe"]
+  },
+  {
+    "name": "Tel Aviv City Center",
+    "statusColor": "#388E3C",
+    "available": "3/6",
+    "power": "240 kW",
+    "price": "₪3.20/kWh",
+    "connectors": ["CCS", "CHAdeMO", "Type 2"],
+    "amenities": ["WiFi", "WC", "Cafe"]
+  },
+    {
+        "name": "Jerusalem Central",
+        "statusColor": "#D32F2F",
+        "available": "0/4",
+        "power": "150 kW",
+        "price": "₪2.00/kWh",
+        "connectors": ["CCS", "Type 2"],
+        "amenities": ["WiFi", "cafe"]
+    },
+    {
+        "name": "Eilat Beachfront",
+        "statusColor": "#388E3C",
+        "available": "1/2",
+        "power": "350 kW",
+        "price": "₪3.50/kWh",
+        "connectors": ["CCS", "CHAdeMO"],
+        "amenities": ["WiFi", "cafe", "WC"]
+    }
+]
