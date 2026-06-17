@@ -1,18 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    // Edit Profile
     const profileBtn = document.getElementById("profile-btn");
     if (profileBtn) {
         profileBtn.addEventListener("click", () => {
-            
+            window.location.href="EditProfile.html";
         });
     }
 
-    // Favorites
     const favoritesBtn = document.getElementById("favorites-btn");
     if (favoritesBtn) {
         favoritesBtn.addEventListener("click", () => {
-            
+            window.location.href="Favorites.html";
         });
     }
 
@@ -31,8 +29,24 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const logoutBtn = document.getElementById("logout-btn");
-    if (logoutBtn) {
+    const logoutModal = document.getElementById("logout-modal");
+    const logoutConfirmBtn = document.getElementById("logout-confirm-btn");
+    const logoutCancelBtn = document.getElementById("logout-cancel-btn");
+
+    if (logoutBtn && logoutModal) {
         logoutBtn.addEventListener("click", () => {
+            logoutModal.classList.remove("hidden");
+        });
+    }
+
+    if (logoutCancelBtn && logoutModal) {
+           logoutCancelBtn.addEventListener("click", () => {
+            logoutModal.classList.add("hidden");
+        });
+    }
+
+    if (logoutConfirmBtn) {
+        logoutConfirmBtn.addEventListener("click", () => {
             window.location.href = "Login.html";
         });
     }

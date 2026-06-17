@@ -1,29 +1,36 @@
 document.addEventListener('DOMContentLoaded', () => {
     const profileForm = document.getElementById('edit-profile-form');
-    const backButton = document.getElementById('btn-back');
     const notification = document.getElementById('notification');
-
-    const modal = document.getElementById('back-modal');
+    
     const backBtn = document.getElementById('btn-back');
+    const modal = document.getElementById('back-modal');
     const confirmBtn = document.getElementById('confirm-btn');
     const cancelBtn = document.getElementById('cancel-btn');
 
-    backBtn.addEventListener('click', () => {
-        modal.classList.remove('hidden');   
-    });
+    if (backBtn && modal) {
+        backBtn.addEventListener('click', () => {
+            modal.classList.remove('hidden');   
+        });
+    }
 
-    cancelBtn.addEventListener('click', () => {
-        modal.classList.add('hidden'); 
-    });
+    if (cancelBtn && modal) {
+        cancelBtn.addEventListener('click', () => {
+            modal.classList.add('hidden'); 
+        });
+    }
 
-    confirmBtn.addEventListener('click', () => {
-        window.location.href = 'MainMenu.html'; 
-    });
+    if (confirmBtn) {
+        confirmBtn.addEventListener('click', () => {
+            window.location.href = 'MainMenu.html'; 
+        });
+    }
 
     function showNotification(message, type) {
-        notification.textContent = message;
-        notification.className = `notification-box ${type}`; 
-        notification.scrollIntoView({ behavior: 'smooth' }); 
+        if (notification) {
+            notification.textContent = message;
+            notification.className = `notification-box ${type}`; 
+            notification.scrollIntoView({ behavior: 'smooth' }); 
+        }
     }
 
     if (profileForm) {
@@ -60,7 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             showNotification('Profile updated successfully! 🎉', 'success');
-            
         });
     }
 });

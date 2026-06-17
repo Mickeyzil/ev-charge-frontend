@@ -88,3 +88,32 @@
 }
 
 .hidden { display: none; }
+
+.modal-buttons button {
+    padding: 10px 22px;
+    border: none;
+    border-radius: 8px; 
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.primary-btn {
+    background-color: #2170FF; 
+    color: white;
+}
+
+.primary-btn:hover {
+    background-color: #1a5ccd; 
+}
+
+.secondary-btn {
+    background-color: #f1f3f5;
+    color: #495057;
+    margin-right: 12px;
+}
+
+.secondary-btn:hover {
+    background-color: #e9ecef;
+}
