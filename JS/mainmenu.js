@@ -21,6 +21,15 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    
+    // Map View
+const mapBtn = document.getElementById("map-btn");
+
+if (mapBtn) {
+    mapBtn.addEventListener("click", () => {
+        window.location.href = "MapView.html";
+    });
+}
     const mapBtn = document.getElementById("map-btn");
     if (mapBtn) {
         mapBtn.addEventListener("click", () => {
