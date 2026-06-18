@@ -1,4 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
+
+    if (localStorage.getItem("darkMode") === "true") {
+        document.body.classList.add("dark-mode");
+    }
+
     const backBtn = document.getElementById("back-main-btn");
     const reserveBtn = document.getElementById("map-reserve-btn");
 

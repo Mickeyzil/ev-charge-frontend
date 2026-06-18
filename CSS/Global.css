@@ -1,3 +1,17 @@
+:root {
+    --bg-main: #9ed3f2;      
+    --card-bg: white;        
+    --text-color: #12355b;   
+    --row-bg: #f3f9ff;       
+}
+
+body.dark-mode {
+    --bg-main: #121212;      
+    --card-bg: #1e1e1e;      
+    --text-color: #ffffff;   
+    --row-bg: #2d2d2d;       
+}
+
 body {
   font-family: 'Arial', sans-serif;
   background-color: #A3D9FF; 
@@ -219,4 +233,101 @@ body {
     height: 52px;
     font-size: 1.20em;
   }
+}
+
+body.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+body.dark-mode main, 
+body.dark-mode header, 
+body.dark-mode footer,
+body.dark-mode .main-header,
+body.dark-mode .main-footer {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+body.dark-mode .settings-card,
+body.dark-mode .menu-card,
+body.dark-mode .station-display-card,
+body.dark-mode .card,
+body.dark-mode .welcome-section {
+    background-color: #242424;
+    color: #ffffff;
+}
+
+body.dark-mode {
+    --bg-main: #121212;      
+    --card-bg: #1e1e1e;      
+    --text-color: #ffffff;   
+    --row-bg: #2d2d2d;
+    --accent-blue: #1d56b3;  
+    --modal-bg: #2a2a2a;     
+}
+
+body.dark-mode {
+    background-color: var(--bg-main) !important;
+    color: var(--text-color) !important;
+}
+
+body.dark-mode button, 
+body.dark-mode .btn-primary, 
+body.dark-mode .save-btn,
+body.dark-mode .reserve-btn,
+body.dark-mode .favorite-reserve-btn {
+    background-color: var(--accent-blue) !important;
+    color: white !important;
+}
+
+body.dark-mode form, 
+body.dark-mode .profile-card, 
+body.dark-mode .edit-profile-container,
+body.dark-mode .welcome-section {
+    background-color: var(--card-bg) !important;
+    color: var(--text-color) !important;
+}
+
+body.dark-mode form label, 
+body.dark-mode form h1, 
+body.dark-mode form h2, 
+body.dark-mode form h3,
+body.dark-mode .profile-card h2 {
+    color: #ffffff !important;
+}
+
+body.dark-mode input[type="text"], 
+body.dark-mode input[type="email"], 
+body.dark-mode input[type="password"], 
+body.dark-mode input[type="tel"], 
+body.dark-mode select {
+    background-color: #2d2d2d !important;
+    color: #ffffff !important;
+    border: 1px solid #444444 !important;
+}
+
+body.dark-mode .modal, 
+body.dark-mode .modal-content, 
+body.dark-mode #back-modal div,
+body.dark-mode #logout-modal div {
+    background-color: var(--modal-bg) !important;
+    color: #ffffff !important;
+    border: 1px solid #444444 !important;
+}
+
+body.dark-mode #back-modal p, 
+body.dark-mode #back-modal h3, 
+body.dark-mode #logout-modal p,
+body.dark-mode #logout-modal h3,
+body.dark-mode .modal-content p,
+body.dark-mode .modal-content h3 {
+    color: #ffffff !important;
+}
+
+body.dark-mode .cancel-btn, 
+body.dark-mode #cancel-btn,
+body.dark-mode #logout-cancel-btn {
+    background-color: #444444 !important;
+    color: #ffffff !important;
 }

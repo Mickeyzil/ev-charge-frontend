@@ -1,5 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+    if (localStorage.getItem("darkMode") === "true") {
+        document.body.classList.add("dark-mode");
+    }
+
     const profileBtn = document.getElementById("profile-btn");
     if (profileBtn) {
         profileBtn.addEventListener("click", () => {
@@ -35,18 +39,14 @@ if (settingsBtn) {
         });
     }
    
+    const mapBtn = document.getElementById("map-btn");
 
+    if (mapBtn) {
+        mapBtn.addEventListener("click", () => {
+            window.location.href = "MapView.html";
+        });
+    }
     
-    // Map View
-const mapBtn = document.getElementById("map-btn");
-
-if (mapBtn) {
-    mapBtn.addEventListener("click", () => {
-        window.location.href = "MapView.html";
-    });
-}
-    
-
     const logoutBtn = document.getElementById("logout-btn");
     const logoutModal = document.getElementById("logout-modal");
     const logoutConfirmBtn = document.getElementById("logout-confirm-btn");

@@ -1,4 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
+
+    if (localStorage.getItem("darkMode") === "true") {
+        document.body.classList.add("dark-mode");
+    }
+
     const profileForm = document.getElementById('edit-profile-form');
     const notification = document.getElementById('notification');
     

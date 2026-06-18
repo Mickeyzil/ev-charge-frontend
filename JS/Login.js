@@ -1,5 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+    if (localStorage.getItem("darkMode") === "true") {
+        document.body.classList.add("dark-mode");
+    }
+
     const contactBtn = document.getElementById("contact-btn");
     const settingsBtn = document.getElementById("settings-btn");
     const loginForm = document.getElementById("login-form");

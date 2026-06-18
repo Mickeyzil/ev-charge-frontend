@@ -1,5 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {const backMainBtn = document.getElementById("back-main-btn");
 
+    if (localStorage.getItem("darkMode") === "true") {
+        document.body.classList.add("dark-mode");
+    }
+
 if (backMainBtn) {
     backMainBtn.addEventListener("click", () => {
         window.location.href = "MainMenu.html";

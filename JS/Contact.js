@@ -1,11 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
+
+    if (localStorage.getItem("darkMode") === "true") {
+        document.body.classList.add("dark-mode");
+    }
+
     const form = document.getElementById("contact-form");
     const messageBox = document.getElementById("contact-message");
-    const backBtn = document.getElementById("back-main-btn");
+    const backBtn = document.getElementById("back-btn");
 
     if (backBtn) {
         backBtn.addEventListener("click", () => {
-            window.location.href = "MainMenu.html";
+            window.history.back();
         });
     }
 
