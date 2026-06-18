@@ -30,12 +30,7 @@ if (mapBtn) {
         window.location.href = "MapView.html";
     });
 }
-    const mapBtn = document.getElementById("map-btn");
-    if (mapBtn) {
-        mapBtn.addEventListener("click", () => {
-            
-        });
-    }
+    
 
     const logoutBtn = document.getElementById("logout-btn");
     const logoutModal = document.getElementById("logout-modal");
