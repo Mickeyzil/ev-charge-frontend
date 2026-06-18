@@ -27,14 +27,15 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    
     // Map View
-    const mapBtn = document.getElementById("map-btn");
+const mapBtn = document.getElementById("map-btn");
 
-    if (mapBtn) {
-        mapBtn.addEventListener("click", () => {
-            // Future Map Page
-        });
-    }
+if (mapBtn) {
+    mapBtn.addEventListener("click", () => {
+        window.location.href = "MapView.html";
+    });
+}
 
     // Log Out
     const logoutBtn = document.getElementById("logout-btn");
