@@ -1,34 +1,57 @@
-document.addEventListener('DOMContentLoaded',()=> {
-    const loginForm = document.getElementById('login-form');
-    loginForm.addEventListener('submit', (event) =>{
+document.addEventListener("DOMContentLoaded", () => {
+
+    const contactBtn = document.getElementById("contact-btn");
+    const settingsBtn = document.getElementById("settings-btn");
+    const loginForm = document.getElementById("login-form");
+
+    if (contactBtn) {
+        contactBtn.addEventListener("click", () => {
+            window.location.href = "Contact.html";
+        });
+    }
+
+    if (settingsBtn) {
+        settingsBtn.addEventListener("click", () => {
+            window.location.href = "Settings.html";
+        });
+    }
+
+    if (!loginForm) return;
+
+    loginForm.addEventListener("submit", (event) => {
         event.preventDefault();
 
-        const errorBox = document.getElementById('error-message');
-        const user_email = document.getElementById('email').value.trim();
-        const user_password = document.getElementById('password').value.trim();
-        
-        errorBox.classList.add('hidden');
+        const errorBox = document.getElementById("error-message");
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+
+        errorBox.classList.add("hidden");
 
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 
-        if(user_email == "" || user_password == "")
-        {
-            errorBox.classList.remove('hidden');
+        if (email === "" || password === "") {
             errorBox.innerHTML = "Please fill all fields";
+            errorBox.classList.remove("hidden");
+            return;
         }
-        else if(!emailPattern.test(user_email))
-        {
-            errorBox.classList.remove('hidden');
-            errorBox.innerHTML = "Please enter valid email";
+
+        if (!emailPattern.test(email)) {
+            errorBox.innerHTML = "Please enter a valid email address";
+            errorBox.classList.remove("hidden");
+            return;
         }
-        else if(!passwordPattern.test(user_password))
-        {
-            errorBox.classList.remove('hidden');
-            errorBox.innerHTML = "<strong>Invalid Password:</strong><br>Must be at least 8 characters, with an uppercase letter, a lowercase letter, and a number.";
+
+        if (!passwordPattern.test(password)) {
+            errorBox.innerHTML =
+                "<strong>Invalid Password:</strong><br>" +
+                "Must contain at least 8 characters, one uppercase letter, one lowercase letter and one number.";
+            errorBox.classList.remove("hidden");
+            return;
         }
-        else{
-            location.href="MainMenu.html";
-        }
+
+        // Login successful
+        window.location.href = "MainMenu.html";
     });
-})
+
+});

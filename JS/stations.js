@@ -5,6 +5,21 @@ if (backMainBtn) {
         window.location.href = "MainMenu.html";
     });
 }
+const contactBtn = document.getElementById("contact-btn");
+
+if (contactBtn) {
+    contactBtn.addEventListener("click", () => {
+        window.location.href = "Contact.html";
+    });
+}
+
+const settingsBtn = document.getElementById("settings-btn");
+
+if (settingsBtn) {
+    settingsBtn.addEventListener("click", () => {
+        window.location.href = "Settings.html";
+    });
+}
     fetch('./data/Stations.json')
         .then(response => response.json())
         .then(data => {
@@ -13,6 +28,7 @@ if (backMainBtn) {
             if (!container) {
                 return;
             }
+            
 
             container.innerHTML = '';
 

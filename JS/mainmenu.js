@@ -6,7 +6,21 @@ document.addEventListener("DOMContentLoaded", () => {
             window.location.href = "EditProfile.html";
         });
     }
+    const contactBtn = document.getElementById("contact-btn");
 
+if (contactBtn) {
+    contactBtn.addEventListener("click", () => {
+        window.location.href = "Contact.html";
+    });
+}
+
+const settingsBtn = document.getElementById("settings-btn");
+
+if (settingsBtn) {
+    settingsBtn.addEventListener("click", () => {
+        window.location.href = "Settings.html";
+    });
+}
     const favoritesBtn = document.getElementById("favorites-btn");
     if (favoritesBtn) {
         favoritesBtn.addEventListener("click", () => {
@@ -20,6 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
             window.location.href = "NearbyStations.html";
         });
     }
+   
 
     
     // Map View

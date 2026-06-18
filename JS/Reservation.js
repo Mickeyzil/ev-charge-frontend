@@ -7,7 +7,21 @@ const stationName = localStorage.getItem('selectedStationName');
             formTitle.textContent = `Reservation to ${stationName}`;
         }
     }
+const contactBtn = document.getElementById("contact-btn");
 
+if (contactBtn) {
+    contactBtn.addEventListener("click", () => {
+        window.location.href = "Contact.html";
+    });
+}
+
+const settingsBtn = document.getElementById("settings-btn");
+
+if (settingsBtn) {
+    settingsBtn.addEventListener("click", () => {
+        window.location.href = "Settings.html";
+    });
+}
 const form = document.getElementById('reservation-form');    
 if(!form)    return;
 

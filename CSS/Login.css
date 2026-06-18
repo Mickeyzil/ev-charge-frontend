@@ -1,22 +1,12 @@
-.error-box{
+.error-box {
     background-color: #FFEAEA;
     color: #D32F2F;
     border: 2px solid #D32F2F;
-    border-radius: 20px; 
+    border-radius: 18px;
     padding: 12px;
     text-align: center;
-    font-weight: bold; 
-}
-
-.welcome-section {
-    background-color: #0052FF; 
-    padding: 30px 20px;        
-    margin: 0;                 
-}
-
-.welcome-section h1, 
-.welcome-section p {
-    color: #ffffff;            
+    font-weight: bold;
+    margin-bottom: 20px;
 }
 
 .top-blue-container {
@@ -25,40 +15,67 @@
     border-bottom-right-radius: 40px;
     max-width: 600px;
     margin: 0 auto;
-    
-    /* 🧼 נחליף את ה-padding-bottom שהיה כאן ל-0 כדי שהכרטיסייה הלבנה תיצמד לתחתית */
-    padding-bottom: 0; 
+    padding-bottom: 0;
 }
 
-.top-blue-container .main-header, 
+.top-blue-container .main-header,
 .top-blue-container .welcome-section {
     background-color: transparent;
     margin: 0;
 }
 
 .top-blue-container .logo,
-.top-blue-container .nav-icons .icon,
-.top-blue-container .welcome-section h1,
-.top-blue-container .welcome-section p {
+.top-blue-container .nav-icons .icon {
     color: #ffffff;
+}
+
+.nav-icons {
+    display: flex;
+    gap: 22px;
+    align-items: center;
+}
+
+.icon {
+    background: none;
+    border: none;
+    color: white;
+    font: inherit;
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+}
+
+.icon:hover {
+    opacity: 0.85;
 }
 
 .top-blue-container .welcome-section {
     background-color: #ffffff;
     margin: 0;
-    padding: 30px 20px;
-    
-    /* 📐 עיגול הפינות העליונות בלבד, בדיוק כמו בפיגמה */
+    padding: 45px 25px;
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
+    text-align: center;
 }
 
 .top-blue-container .welcome-section h1 {
-    color: #1A365D; /* צבע כחול כהה לכותרת */
+    color: #1A365D;
+    font-size: 36px;
+    margin-bottom: 10px;
 }
 
 .top-blue-container .welcome-section p {
-    color: #7d9bc4; /* צבע כחול-אפרפר רך לתת-הכותרת */
+    color: #7d9bc4;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.booking-form {
+    max-width: 520px;
+    margin: 50px auto;
+}
+
+.submit-btn {
+    cursor: pointer;
 }

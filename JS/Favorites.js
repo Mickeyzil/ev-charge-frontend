@@ -12,7 +12,21 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("favorites-container not found");
         return;
     }
+const contactBtn = document.getElementById("contact-btn");
 
+if (contactBtn) {
+    contactBtn.addEventListener("click", () => {
+        window.location.href = "Contact.html";
+    });
+}
+
+const settingsBtn = document.getElementById("settings-btn");
+
+if (settingsBtn) {
+    settingsBtn.addEventListener("click", () => {
+        window.location.href = "Settings.html";
+    });
+}
     fetch("./data/Stations.json")
         .then(response => {
             if (!response.ok) {
