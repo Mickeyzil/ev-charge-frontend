@@ -1,38 +1,45 @@
-document.addEventListener('DOMContentLoaded', () => {const backMainBtn = document.getElementById("back-main-btn");
+document.addEventListener('DOMContentLoaded', () => {
+    const backMainBtn = document.getElementById("back-main-btn");
 
     if (localStorage.getItem("darkMode") === "true") {
         document.body.classList.add("dark-mode");
     }
 
-if (backMainBtn) {
-    backMainBtn.addEventListener("click", () => {
-        window.location.href = "MainMenu.html";
-    });
-}
-const contactBtn = document.getElementById("contact-btn");
+    if (backMainBtn) {
+        backMainBtn.addEventListener("click", () => {
+            window.location.href = "MainMenu.html";
+        });
+    }
 
-if (contactBtn) {
-    contactBtn.addEventListener("click", () => {
-        window.location.href = "Contact.html";
-    });
-}
+    const contactBtn = document.getElementById("contact-btn");
 
-const settingsBtn = document.getElementById("settings-btn");
+    if (contactBtn) {
+        contactBtn.addEventListener("click", () => {
+            window.location.href = "Contact.html";
+        });
+    }
 
-if (settingsBtn) {
-    settingsBtn.addEventListener("click", () => {
-        window.location.href = "Settings.html";
-    });
-}
-    fetch('./data/Stations.json')
-        .then(response => response.json())
-        .then(data => {
+    const settingsBtn = document.getElementById("settings-btn");
+
+    if (settingsBtn) {
+        settingsBtn.addEventListener("click", () => {
+            window.location.href = "Settings.html";
+        });
+    }
+
+    fetch('http://localhost:5000/api/stations')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json(); 
+        })
+        .then(data => { 
             const container = document.getElementById('stations-container');
 
             if (!container) {
                 return;
             }
-            
 
             container.innerHTML = '';
 
