@@ -57,5 +57,12 @@ document.addEventListener("DOMContentLoaded", () => {
         // Login successful
         window.location.href = "MainMenu.html";
     });
+    const signupBtn = document.getElementById("signup-btn");
+
+if (signupBtn) {
+    signupBtn.addEventListener("click", () => {
+        window.location.href = "Register.html";
+    });
+}
 
 });

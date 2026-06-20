@@ -79,3 +79,17 @@
 .submit-btn {
     cursor: pointer;
 }
+.signup-link-btn {
+  background: transparent;
+  border: none;
+  color: #1A365D;
+  font-size: 1.05em;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 18px;
+  text-decoration: underline;
+}
+
+.signup-link-btn:hover {
+  color: #2170FF;
+}

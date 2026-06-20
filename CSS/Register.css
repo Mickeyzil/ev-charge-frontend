@@ -1,0 +1,135 @@
+.register-page {
+  max-width: 600px;
+}
+
+.register-title {
+  text-align: center;
+  color: #1A365D;
+  margin: 20px 0;
+}
+
+.register-title h1 {
+  font-size: 2.2em;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.register-title p {
+  font-size: 1.1em;
+  font-weight: bold;
+  margin: 0;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  margin-top: 25px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 1.25em;
+  font-weight: 800;
+  color: #000000;
+  margin-bottom: 10px;
+}
+
+.form-group input {
+  height: 56px;
+  border: none;
+  border-radius: 999px;
+  background-color: #ffffff;
+  text-align: center;
+  font-size: 1.1em;
+  font-weight: 700;
+  color: #000000;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.form-group input::placeholder {
+  color: #7d9bc4;
+  font-weight: 500;
+}
+
+.form-group input:focus {
+  outline: 3px solid #2170FF;
+}
+
+.register-btn {
+  height: 58px;
+  border: none;
+  border-radius: 999px;
+  background-color: #2170FF;
+  color: #ffffff;
+  font-size: 1.25em;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(33, 112, 255, 0.3);
+}
+
+.register-btn:hover {
+  background-color: #1656c9;
+}
+
+.back-login-btn {
+  background: transparent;
+  border: none;
+  color: #1A365D;
+  font-size: 1.05em;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.back-login-btn:hover {
+  color: #2170FF;
+}
+
+.register-message {
+  border-radius: 16px;
+  padding: 14px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.register-message.error {
+  background-color: #FFEAEA;
+  color: #D32F2F;
+  border: 2px solid #D32F2F;
+}
+
+.register-message.success {
+  background-color: #E8F8EE;
+  color: #0A8F3C;
+  border: 2px solid #0A8F3C;
+}
+
+.hidden {
+  display: none !important;
+}
+
+@media (max-width: 480px) {
+  .register-title h1 {
+    font-size: 1.8em;
+  }
+
+  .form-group label {
+    font-size: 1.1em;
+  }
+
+  .form-group input {
+    height: 50px;
+    font-size: 1em;
+  }
+
+  .register-btn {
+    height: 52px;
+    font-size: 1.1em;
+  }
+}
