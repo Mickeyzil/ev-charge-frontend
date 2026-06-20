@@ -133,3 +133,46 @@
     font-size: 1.1em;
   }
 }
+
+.nav-icons .icon {
+    background-color: #ffffff;    
+    color: #2170FF;               
+    border: 2px solid #2170FF;    
+    border-radius: 999px;        
+    padding: 8px 18px;           
+    font-size: 0.95em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;   
+    box-shadow: 0 2px 6px rgba(33, 112, 255, 0.1); 
+}
+
+.nav-icons .icon:hover {
+    background-color: #2170FF;    
+    color: #ffffff;               
+    box-shadow: 0 4px 10px rgba(33, 112, 255, 0.2);
+    transform: translateY(-1px);  
+}
+
+.nav-icons .icon:active {
+    transform: translateY(1px);   
+}
+
+.form-group select {
+  height: 56px;
+  border: none;
+  border-radius: 999px;
+  background-color: #ffffff;
+  font-size: 1.1em;
+  font-weight: 700;
+  color: #000000;
+  padding: 0 20px;
+  box-sizing: border-box;
+  cursor: pointer;
+  text-align-last: center; 
+  appearance: none; 
+}
+
+.form-group select:focus {
+  outline: 3px solid #2170FF;
+}
