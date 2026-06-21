@@ -54,15 +54,36 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Login successful
+        // 🔥 שליחת נתוני התחברות לשרת ובדיקה מול ה-Database
+        fetch('http://localhost:5000/api/users/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        })
+        .then(response => response.json())
+        .then(data => {
+    if (data.message === 'Login successful! 👋') {
+        // 🔥 שומרים את השם המלא שהגיע מהשרת בתוך ה-localStorage
+        localStorage.setItem("userFullName", data.user.full_name);
+        
+        // מעבר לעמוד הראשי
         window.location.href = "MainMenu.html";
+    } else {
+        errorBox.innerHTML = data.message || "Login failed";
+        errorBox.classList.remove("hidden");
+    }
+})
+        .catch(err => {
+            console.error('Error during login fetch:', err);
+            errorBox.innerHTML = "Server error, please try again.";
+            errorBox.classList.remove("hidden");
+        });
     });
+
     const signupBtn = document.getElementById("signup-btn");
-
-if (signupBtn) {
-    signupBtn.addEventListener("click", () => {
-        window.location.href = "Register.html";
-    });
-}
-
+    if (signupBtn) {
+        signupBtn.addEventListener("click", () => {
+            window.location.href = "Register.html";
+        });
+    }
 });

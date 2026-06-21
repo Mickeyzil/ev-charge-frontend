@@ -4,6 +4,13 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.classList.add("dark-mode");
     }
 
+    // 🔥 הצגת השם המלא של המשתמש מתוך ה-localStorage
+    const storedName = localStorage.getItem("userFullName");
+    const welcomeHeading = document.getElementById("welcome-message");
+    if (welcomeHeading && storedName) {
+        welcomeHeading.textContent = `Hello, ${storedName}! 👋`;
+    }
+
     const profileBtn = document.getElementById("profile-btn");
     if (profileBtn) {
         profileBtn.addEventListener("click", () => {
@@ -12,19 +19,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     const contactBtn = document.getElementById("contact-btn");
 
-if (contactBtn) {
-    contactBtn.addEventListener("click", () => {
-        window.location.href = "Contact.html";
-    });
-}
+    if (contactBtn) {
+        contactBtn.addEventListener("click", () => {
+            window.location.href = "Contact.html";
+        });
+    }
 
-const settingsBtn = document.getElementById("settings-btn");
+    const settingsBtn = document.getElementById("settings-btn");
 
-if (settingsBtn) {
-    settingsBtn.addEventListener("click", () => {
-        window.location.href = "Settings.html";
-    });
-}
+    if (settingsBtn) {
+        settingsBtn.addEventListener("click", () => {
+            window.location.href = "Settings.html";
+        });
+    }
+    
     const favoritesBtn = document.getElementById("favorites-btn");
     if (favoritesBtn) {
         favoritesBtn.addEventListener("click", () => {
@@ -66,9 +74,9 @@ if (settingsBtn) {
 
     if (logoutConfirmBtn) {
         logoutConfirmBtn.addEventListener("click", () => {
-            localStorage.clear(); 
+            // 🔥 מחיקת השם מהדפדפן בעת התנתקות
+            localStorage.removeItem("userFullName");
             window.location.href = "Login.html";
         });
     }
-
 });

@@ -4,6 +4,14 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.add("dark-mode");
     }
 
+    const BckToNerby = document.getElementById('back-stations-btn');
+    if(BckToNerby)
+    {
+        BckToNerby.addEventListener("click",() =>{
+            window.location.href = "NearbyStations.html";
+        })
+    }
+
     const stationName = localStorage.getItem('selectedStationName');
         if (stationName) {
             const formTitle = document.getElementById('form-title');
