@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // פנייה לשרת בפורט 5000 כפי שביקשת
-    fetch('http://localhost:5000/api/stations')
+    fetch(`${API_URL}/api/stations`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         return;
                     }
 
-                    fetch('http://localhost:5000/api/favorites/add', {
+                    fetch(`${API_URL}/api/favorites/add`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({

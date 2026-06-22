@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 1. טעינת נתונים אוטומטית בעליית הדף
     if (userId) {
-        fetch(`http://localhost:5000/api/users/${userId}`)
+        fetch(`${API_URL}/api/users/${userId}`)
             .then(res => res.json())
             .then(user => {
                 document.getElementById('full-name').value = user.full_name || '';
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 oldPassword: oldPassword
             };
 
-            fetch(`http://localhost:5000/api/users/update/${userId}`, {
+            fetch(`${API_URL}/api/users/update/${userId}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(updatedData)

@@ -1,4 +1,3 @@
-/* עיצוב כללי לעמוד המועדפים ושמירה על הרקע התכול שלך */
 .favorites-page {
   max-width: 1000px;
   background-color: #A3D9FF;
@@ -13,7 +12,6 @@
   margin-top: 25px;
 }
 
-/* התאמה למחלקה החדשה מה-JS של ה-Stations */
 .station-display-card {
   width: 90%;
   margin: 0 auto;
@@ -25,7 +23,6 @@
   transition: background-color 0.3s, color 0.3s;
 }
 
-/* כותרת הכרטיסייה והנקודה */
 .station-card-header {
   display: flex;
   justify-content: space-between;
@@ -45,7 +42,6 @@
   border-radius: 50%;
 }
 
-/* שורת המידע המרכזית (AVAILABLE & POWER) */
 .info-row-main {
   display: flex;
   justify-content: space-between;
@@ -72,7 +68,7 @@
   margin-bottom: 4px;
 }
 
-.info-value-strong, 
+.info-value-strong,
 .info-value-highlight {
   display: block;
   font-weight: bold;
@@ -81,10 +77,9 @@
 }
 
 .info-value-highlight {
-  color: #00B050; /* צבע ירוק מודגש ל-POWER */
+  color: #00B050;
 }
 
-/* שורות מחיר, פלאגים ו-WiFi */
 .price-row,
 .spec-row {
   display: flex;
@@ -104,7 +99,6 @@
   color: #000000;
 }
 
-/* קונטיינר התגיות של ה-Connectors וה-Amenities */
 .tags-container {
   display: flex;
   flex-wrap: wrap;
@@ -120,7 +114,6 @@
   font-weight: bold;
 }
 
-/* הודעות שגיאה או תפוסה בתוך הכרטיסייה */
 .station-message {
   color: #ff3b30;
   font-size: 0.9em;
@@ -129,31 +122,27 @@
   font-weight: bold;
 }
 
-/* כפתורי הפעולה בתחתית הכרטיסייה */
 .card-actions {
   margin-top: 20px;
   border-top: 1px solid #f0f0f0;
   padding-top: 15px;
   display: flex;
-  gap: 15px; /* מרווח בין שני הכפתורים החדשים */
+  gap: 15px;
 }
 
-/* עיצוב כללי לכפתורים */
-.btn-primary, 
+.btn-primary,
 .btn-secondary {
-  flex: 1; /* מחלק את הרווח שווה בשווה בין שני הכפתורים */
+  flex: 1;
   border: none;
   border-radius: 12px;
   padding: 11px 15px;
   font-weight: bold;
   cursor: pointer;
   font-size: 0.95em;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, color 0.2s;
 }
 
-/* כפתור הזמנה ראשי (Make a Reservation) */
 .btn-primary {
-  width: 100%;
   background-color: #2170FF;
   color: #ffffff;
 }
@@ -162,11 +151,28 @@
   background-color: #1656c9;
 }
 
-/* כפתור חסום (במידה והתחנה מלאה) */
+.btn-secondary {
+  background-color: #f5f5f5;
+  color: #1A365D;
+}
+
+.btn-secondary:hover {
+  background-color: #ffd9d9;
+  color: #d32f2f;
+}
+
 .disabled-btn {
   background-color: #cccccc !important;
   color: #666666 !important;
   cursor: not-allowed !important;
+}
+
+.no-favorites,
+.error-message {
+  text-align: center;
+  font-weight: bold;
+  color: #1A365D;
+  font-size: 1.1em;
 }
 
 .hidden {
@@ -174,8 +180,44 @@
 }
 
 @media (max-width: 600px) {
+  .station-display-card {
+    width: 100%;
+    padding: 24px;
+  }
+
   .card-actions {
-    flex-direction: column; /* במובייל הכפתורים ירדו אחד מתחת לשני */
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+.card-actions {
+  margin-top: 20px;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 15px;
+  display: flex;
+  gap: 15px;
+}
+
+.btn-secondary {
+  flex: 1;
+  border: none;
+  border-radius: 12px;
+  padding: 11px 15px;
+  background-color: #f5f5f5;
+  color: #1A365D;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-secondary:hover {
+  background-color: #ffd9d9;
+  color: #d32f2f;
+}
+
+@media (max-width: 600px) {
+  .card-actions {
+    flex-direction: column;
     gap: 10px;
   }
 }

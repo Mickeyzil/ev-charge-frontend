@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             // 🔥 שליחת כל 5 השדות לשרת ה-Node.js כדי שישמור ב-MySQL
-            fetch('http://localhost:5000/api/users/register', {
+            fetch(`${API_URL}/api/users/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 

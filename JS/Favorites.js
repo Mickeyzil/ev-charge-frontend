@@ -1,16 +1,29 @@
 document.addEventListener("DOMContentLoaded", () => {
-
-    // הפעלת Dark Mode במידה ונבחר ב-Settings
     if (localStorage.getItem("darkMode") === "true") {
         document.body.classList.add("dark-mode");
     }
 
     const container = document.getElementById("favorites-container");
     const backBtn = document.getElementById("back-main-btn");
+    const contactBtn = document.getElementById("contact-btn");
+    const settingsBtn = document.getElementById("settings-btn");
+    const userId = localStorage.getItem("userId");
 
     if (backBtn) {
         backBtn.addEventListener("click", () => {
             window.location.href = "MainMenu.html";
+        });
+    }
+
+    if (contactBtn) {
+        contactBtn.addEventListener("click", () => {
+            window.location.href = "Contact.html";
+        });
+    }
+
+    if (settingsBtn) {
+        settingsBtn.addEventListener("click", () => {
+            window.location.href = "Settings.html";
         });
     }
 
@@ -19,35 +32,17 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    const contactBtn = document.getElementById("contact-btn");
-    if (contactBtn) {
-        contactBtn.addEventListener("click", () => {
-            window.location.href = "Contact.html";
-        });
-    }
-
-    const settingsBtn = document.getElementById("settings-btn");
-    if (settingsBtn) {
-        settingsBtn.addEventListener("click", () => {
-            window.location.href = "Settings.html";
-        });
-    }
-
-    // שליפת ה-ID של המשתמש המחובר מה-localStorage
-    const userId = localStorage.getItem("userId");
-
-    // חסימת גישה והעברה לעמוד ה-Login אם המשתמש לא מחובר
     if (!userId || userId === "undefined" || userId === "null") {
         window.location.href = "Login.html";
         return;
     }
 
-    // פנייה לשרת ה-Node.js לקבלת המועדפים מה-Database
-    fetch(`http://localhost:5000/api/favorites/${userId}`)
+    fetch(`${API_URL}/api/favorites/${userId}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error("Failed to fetch favorite stations from server");
             }
+
             return response.json();
         })
         .then(stations => {
@@ -60,63 +55,74 @@ document.addEventListener("DOMContentLoaded", () => {
 
             stations.forEach(station => {
                 const card = document.createElement("div");
-                card.className = "station-display-card"; 
+                card.className = "station-display-card";
 
                 let connectors = [];
                 let amenities = [];
 
                 try {
-                    if (typeof station.connectors === 'string') {
-                        if (station.connectors.trim().startsWith('[')) {
+                    if (typeof station.connectors === "string") {
+                        if (station.connectors.trim().startsWith("[")) {
                             connectors = JSON.parse(station.connectors);
                         } else {
-                            connectors = station.connectors.split(',').map(item => item.trim()).filter(Boolean);
+                            connectors = station.connectors
+                                .split(",")
+                                .map(item => item.trim())
+                                .filter(Boolean);
                         }
                     } else if (Array.isArray(station.connectors)) {
                         connectors = station.connectors;
                     }
-                } catch (e) {
+                } catch (error) {
                     connectors = station.connectors ? [station.connectors] : ["Type 2"];
                 }
 
                 try {
-                    if (typeof station.amenities === 'string') {
-                        if (station.amenities.trim().startsWith('[')) {
+                    if (typeof station.amenities === "string") {
+                        if (station.amenities.trim().startsWith("[")) {
                             amenities = JSON.parse(station.amenities);
                         } else {
-                            amenities = station.amenities.split(',').map(item => item.trim()).filter(Boolean);
+                            amenities = station.amenities
+                                .split(",")
+                                .map(item => item.trim())
+                                .filter(Boolean);
                         }
                     } else if (Array.isArray(station.amenities)) {
                         amenities = station.amenities;
                     }
-                } catch (e) {
+                } catch (error) {
                     amenities = station.amenities ? [station.amenities] : ["WiFi"];
                 }
 
                 const connectorsHTML = connectors
                     .map(connector => `<span class="tag-item">${connector}</span>`)
-                    .join(' ');
+                    .join("");
 
                 const amenitiesHTML = amenities
                     .map(amenity => `<span class="tag-item">${amenity}</span>`)
-                    .join(' ');
+                    .join("");
 
-                const availableSlots = station.available_slots !== undefined ? parseInt(station.available_slots) : 0;
-                const totalSlots = station.total_slots !== undefined ? parseInt(station.total_slots) : 0;
-                
+                const availableSlots = station.available_slots !== undefined
+                    ? parseInt(station.available_slots)
+                    : 0;
+
+                const totalSlots = station.total_slots !== undefined
+                    ? parseInt(station.total_slots)
+                    : 0;
+
                 const isFull = availableSlots === 0;
 
-                let statusColor = '#FFB300'; 
-                
+                let statusColor = "#FFB300";
+
                 if (availableSlots === 0) {
-                    statusColor = '#E53935'; 
-                } else if (availableSlots == totalSlots) {
-                    statusColor = '#00B050'; 
+                    statusColor = "#E53935";
+                } else if (availableSlots === totalSlots) {
+                    statusColor = "#00B050";
                 }
 
                 card.innerHTML = `
                     <div class="station-card-header">
-                        <h2 class="station-card-title">${station.name || 'Unknown Station'}</h2>
+                        <h2 class="station-card-title">${station.name || "Unknown Station"}</h2>
                         <span class="status-dot" style="background-color: ${statusColor};"></span>
                     </div>
 
@@ -129,13 +135,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
                             <div class="info-block align-right">
                                 <span class="info-label">POWER</span>
-                                <span class="info-value-highlight">⚡ ${station.power || '50'}</span>
+                                <span class="info-value-highlight">⚡ ${station.power || "50"}</span>
                             </div>
                         </div>
 
                         <div class="price-row">
                             <span class="price-icon">💲</span>
-                            <span class="price-value">${station.price || '0.0'}</span>
+                            <span class="price-value">${station.price || "0.0"}</span>
                         </div>
 
                         <div class="spec-row">
@@ -150,27 +156,58 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         <p class="station-message hidden"></p>
 
-                            <button class="btn-primary reserve-btn ${isFull ? 'disabled-btn' : ''}" type="button" ${isFull ? 'disabled' : ''}>
-                                ${isFull ? '❌ Fully Booked' : '📅 Make a Reservation'}
+                        <div class="card-actions">
+                            <button class="btn-secondary remove-favorite-btn" type="button">
+                                💔 Remove Favorite
+                            </button>
+
+                            <button class="btn-primary reserve-btn ${isFull ? "disabled-btn" : ""}" type="button" ${isFull ? "disabled" : ""}>
+                                ${isFull ? "❌ Fully Booked" : "📅 Make a Reservation"}
                             </button>
                         </div>
                     </div>
                 `;
 
-                // קישור כפתור ההזמנה
-                const reserveBtn = card.querySelector('.reserve-btn');
-                const messageBox = card.querySelector('.station-message');
+                const reserveBtn = card.querySelector(".reserve-btn");
+                const removeBtn = card.querySelector(".remove-favorite-btn");
+                const messageBox = card.querySelector(".station-message");
 
-                reserveBtn.addEventListener('click', () => {
+                reserveBtn.addEventListener("click", () => {
                     if (isFull) {
                         messageBox.textContent = `${station.name} is fully booked. Please choose another station.`;
-                        messageBox.classList.remove('hidden');
+                        messageBox.classList.remove("hidden");
                         return;
                     }
 
-                    localStorage.setItem('selectedStationName', station.name);
-                    localStorage.setItem('comingFrom', 'Favorites.html');
-                    window.location.href = 'Reservation.html';
+                    localStorage.setItem("selectedStationName", station.name);
+                    localStorage.setItem("comingFrom", "Favorites.html");
+                    window.location.href = "Reservation.html";
+                });
+
+                removeBtn.addEventListener("click", () => {
+                    fetch(`${API_URL}/api/favorites/remove`, {
+                        method: "DELETE",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                       body: JSON.stringify({
+    user_id: userId,
+    station_id: station.id
+})
+                    })
+                        .then(response => response.json())
+                        .then(() => {
+                            card.remove();
+
+                            if (container.children.length === 0) {
+                                container.innerHTML = "<p class='no-favorites'>You haven't added any favorites yet. ❤️</p>";
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error removing favorite:", error);
+                            messageBox.textContent = "Failed to remove station from favorites.";
+                            messageBox.classList.remove("hidden");
+                        });
                 });
 
                 container.appendChild(card);
