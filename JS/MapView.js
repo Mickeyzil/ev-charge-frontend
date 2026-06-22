@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const backBtn = document.getElementById("back-main-btn");
     const reserveBtn = document.getElementById("map-reserve-btn");
+    const favoriteBtn = document.getElementById("map-favorite-btn"); 
 
     const searchInput = document.getElementById("map-search");
     const statusFilter = document.getElementById("status-filter");
@@ -19,6 +20,9 @@ document.addEventListener("DOMContentLoaded", () => {
     let selectedStation = null;
     let stationsData = [];
     let markerObjects = [];
+    let userFavorites = []; 
+
+    const userId = localStorage.getItem("userId");
 
     if (backBtn) {
         backBtn.addEventListener("click", () => {
@@ -26,6 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // אתחול המפה על מרכז הארץ
     const map = L.map("leaflet-map").setView([31.8, 35.0], 7);
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -33,10 +38,21 @@ document.addEventListener("DOMContentLoaded", () => {
         attribution: "© OpenStreetMap"
     }).addTo(map);
 
-    fetch("./data/Stations.json")
+    // טעינת המועדפים מהשרת
+    if (userId) {
+        fetch(`${API_URL}/api/favorites/${userId}`)
+            .then(res => res.json())
+            .then(favorites => {
+                userFavorites = favorites.map(fav => fav.favorite_id);
+            })
+            .catch(err => console.error("Error loading user favorites:", err));
+    }
+
+    // משיכת כל התחנות להצגה על המפה
+    fetch(`${API_URL}/api/stations`)
         .then(response => response.json())
         .then(stations => {
-            stationsData = addCoordinatesToStations(stations);
+            stationsData = stations; 
 
             stationsData.forEach(station => {
                 const status = getStationStatus(station);
@@ -48,17 +64,19 @@ document.addEventListener("DOMContentLoaded", () => {
                     iconAnchor: [21, 21]
                 });
 
-                const marker = L.marker([station.lat, station.lng], { icon }).addTo(map);
+                if (station.latitude && station.longitude) {
+                    const marker = L.marker([station.latitude, station.longitude], { icon }).addTo(map);
 
-                marker.on("click", () => {
-                    selectStation(station);
-                });
+                    marker.on("click", () => {
+                        selectStation(station);
+                    });
 
-                markerObjects.push({
-                    marker,
-                    station,
-                    status
-                });
+                    markerObjects.push({
+                        marker,
+                        station,
+                        status
+                    });
+                }
             });
 
             if (searchInput) {
@@ -70,26 +88,8 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         })
         .catch(error => {
-            console.error("Error loading map stations:", error);
+            console.error("Error loading map stations from server:", error);
         });
-
-    function addCoordinatesToStations(stations) {
-        return stations.map(station => {
-            const coordinates = {
-                "Haifa": { lat: 32.7940, lng: 34.9896 },
-                "Tel Aviv City Center": { lat: 32.0853, lng: 34.7818 },
-                "Modiin Maccabim Reut": { lat: 31.8996, lng: 35.0083 },
-                "Jerusalem Central": { lat: 31.7683, lng: 35.2137 },
-                "Eilat Beachfront": { lat: 29.5577, lng: 34.9519 }
-            };
-
-            return {
-                ...station,
-                lat: coordinates[station.name].lat,
-                lng: coordinates[station.name].lng
-            };
-        });
-    }
 
     function getStationStatus(station) {
         const parts = station.available.split("/");
@@ -99,28 +99,27 @@ document.addEventListener("DOMContentLoaded", () => {
         if (available === 0) {
             return "full";
         }
-
         if (available < total) {
             return "partial";
         }
-
         return "available";
     }
-const contactBtn = document.getElementById("contact-btn");
 
-if (contactBtn) {
-    contactBtn.addEventListener("click", () => {
-        window.location.href = "Contact.html";
-    });
-}
+    const contactBtn = document.getElementById("contact-btn");
+    if (contactBtn) {
+        contactBtn.addEventListener("click", () => {
+            window.location.href = "Contact.html";
+        });
+    }
 
-const settingsBtn = document.getElementById("settings-btn");
+    const settingsBtn = document.getElementById("settings-btn");
+    if (settingsBtn) {
+        settingsBtn.addEventListener("click", () => {
+            window.location.href = "Settings.html";
+        });
+    }
 
-if (settingsBtn) {
-    settingsBtn.addEventListener("click", () => {
-        window.location.href = "Settings.html";
-    });
-}
+    // פונקציית בחירת תחנה מהמפה
     function selectStation(station) {
         selectedStation = station;
 
@@ -131,9 +130,17 @@ if (settingsBtn) {
         stationPrice.textContent = station.price;
 
         const isFull = station.available.startsWith("0");
-
         reserveBtn.disabled = isFull;
         reserveBtn.textContent = isFull ? "Fully Booked" : "Make a Reservation";
+
+        // עדכון דינמי של כפתור המועדפים בהתאם לתחנה שנבחרה
+        if (userFavorites.includes(station.station_id)) {
+            favoriteBtn.innerHTML = "⭐ Remove from Favorites";
+            favoriteBtn.classList.add("active");
+        } else {
+            favoriteBtn.innerHTML = "☆ Add to Favorites";
+            favoriteBtn.classList.remove("active");
+        }
     }
 
     function filterStations() {
@@ -156,8 +163,79 @@ if (settingsBtn) {
         reserveBtn.addEventListener("click", () => {
             if (!selectedStation) return;
 
+            localStorage.setItem("selectedStationId", selectedStation.station_id);
             localStorage.setItem("selectedStationName", selectedStation.name);
+            localStorage.setItem("comingFrom", "map");
+            
             window.location.href = "Reservation.html";
+        });
+    }
+
+    // 🌟 הטיפול בכפתור המועדפים ללא שום alert() 
+    if (favoriteBtn) {
+        favoriteBtn.addEventListener("click", () => {
+            if (!selectedStation) return;
+            
+            // 1. הגנה במקרה שהמשתמש לא מחובר - שינוי זמני של מראה הכפתור
+            if (!userId) {
+                const originalHtml = favoriteBtn.innerHTML;
+                favoriteBtn.innerHTML = "⚠️ Please Log In First";
+                favoriteBtn.style.color = "#D32F2F";
+                favoriteBtn.style.borderColor = "#D32F2F";
+                
+                setTimeout(() => {
+                    favoriteBtn.innerHTML = originalHtml;
+                    favoriteBtn.style.color = "";
+                    favoriteBtn.style.borderColor = "";
+                }, 2500);
+                return;
+            }
+
+            const isAlreadyFavorite = userFavorites.includes(selectedStation.station_id);
+            
+            const targetUrl = isAlreadyFavorite 
+                ? `${API_URL}/api/favorites/remove` 
+                : `${API_URL}/api/favorites/add`;
+                
+            const targetMethod = isAlreadyFavorite ? "DELETE" : "POST";
+
+            fetch(targetUrl, {
+                method: targetMethod,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ user_id: userId, station_id: selectedStation.station_id })
+            })
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`Server responded with status ${res.status}`);
+                }
+                return res.json();
+            })
+            .then(data => {
+                if (isAlreadyFavorite) {
+                    userFavorites = userFavorites.filter(id => id !== selectedStation.station_id);
+                    favoriteBtn.innerHTML = "☆ Add to Favorites";
+                    favoriteBtn.classList.remove("active");
+                } else {
+                    userFavorites.push(selectedStation.station_id);
+                    favoriteBtn.innerHTML = "⭐ Remove from Favorites";
+                    favoriteBtn.classList.add("active");
+                }
+            })
+            .catch(err => {
+                console.error("Error updating favorites:", err);
+                
+                // 2. הגנה במקרה של שגיאת תקשורת/שרת - חיווי אדום זמני על הכפתור
+                const originalHtml = favoriteBtn.innerHTML;
+                favoriteBtn.innerHTML = "⚠️ Connection Error";
+                favoriteBtn.style.color = "#D32F2F";
+                favoriteBtn.style.borderColor = "#D32F2F";
+                
+                setTimeout(() => {
+                    favoriteBtn.innerHTML = originalHtml;
+                    favoriteBtn.style.color = "";
+                    favoriteBtn.style.borderColor = "";
+                }, 2500);
+            });
         });
     }
 });

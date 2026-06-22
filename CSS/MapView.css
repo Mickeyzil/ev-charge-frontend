@@ -336,3 +336,45 @@
 .marker-full {
   background-color: #D32F2F;
 }
+
+/* ===== Favorite Button Styling ===== */
+.map-favorite-btn {
+  width: 100%;
+  margin-top: 10px;
+  border: 2px solid #2170FF; /* משתמש בצבע הכחול הראשי של המערכת */
+  border-radius: 14px;
+  padding: 13px;
+  background-color: transparent;
+  color: #2170FF;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.map-favorite-btn:hover {
+  background-color: #2170FF;
+  color: #ffffff; /* הופך את הרקע לכחול והטקסט ללבן בריחופו של העכבר */
+}
+
+/* התאמה למצב חשוך במידה ויש ברקע */
+.dark-mode .map-favorite-btn {
+  border-color: #4a8eff;
+  color: #4a8eff;
+}
+
+.dark-mode .map-favorite-btn:hover {
+  background-color: #4a8eff;
+  color: #ffffff;
+}
+
+/* כשהתחנה כבר נמצאת במועדפים */
+.map-favorite-btn.active {
+  background-color: #FFD700; /* צבע זהב/צהוב יפה */
+  border-color: #E6B800;
+  color: #000000; /* טקסט שחור קריא על רקע צהוב */
+}
+
+.map-favorite-btn.active:hover {
+  background-color: #e6b800;
+  color: #000000;
+}
