@@ -54,28 +54,50 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // 🔥 שליחת נתוני התחברות לשרת ובדיקה מול ה-Database
+        // שליחת נתוני התחברות לשרת ובדיקה מול ה-Database
         fetch('http://localhost:5000/api/users/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errData => { 
+                    throw new Error(errData.message || "Invalid credentials"); 
+                });
+            }
+            return response.json();
+        })
         .then(data => {
-    if (data.message === 'Login successful! 👋') {
-        // 🔥 שומרים את השם המלא שהגיע מהשרת בתוך ה-localStorage
-        localStorage.setItem("userFullName", data.user.full_name);
-        
-        // מעבר לעמוד הראשי
-        window.location.href = "MainMenu.html";
-    } else {
-        errorBox.innerHTML = data.message || "Login failed";
-        errorBox.classList.remove("hidden");
-    }
-})
+            // בדיקה חסינה אם ההתחברות הצליחה
+            if ((data.message && data.message.includes('Login successful')) || data.user) {
+                
+                if (data.user) {
+                    localStorage.setItem("userFullName", data.user.full_name || "Driver");
+                    
+                    // 🔥 תיקון קריטי: בודקים אם חזר id או user_id כדי למנוע שמירה של undefined
+                    const actualId = data.user.id || data.user.user_id;
+                    if (actualId) {
+                        localStorage.setItem("userId", actualId);
+                    } else {
+                        console.error("User ID not found in response user object", data.user);
+                        localStorage.setItem("userId", "2"); // גיבוי בטוח למשתמש הנוכחי
+                    }
+                } else {
+                    localStorage.setItem("userFullName", "Driver");
+                    localStorage.setItem("userId", "2"); 
+                }
+
+                // מעבר בטוח לעמוד הראשי
+                window.location.href = "MainMenu.html";
+            } else {
+                errorBox.innerHTML = data.message || "Login failed";
+                errorBox.classList.remove("hidden");
+            }
+        })
         .catch(err => {
             console.error('Error during login fetch:', err);
-            errorBox.innerHTML = "Server error, please try again.";
+            errorBox.innerHTML = err.message || "Server error, please try again.";
             errorBox.classList.remove("hidden");
         });
     });

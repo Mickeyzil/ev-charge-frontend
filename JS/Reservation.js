@@ -5,11 +5,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const BckToNerby = document.getElementById('back-stations-btn');
-    if(BckToNerby)
-    {
-        BckToNerby.addEventListener("click",() =>{
-            window.location.href = "NearbyStations.html";
-        })
+    if (BckToNerby) {
+        const comingFrom = localStorage.getItem("comingFrom");
+
+        if (comingFrom === "Favorites.html") {
+            BckToNerby.innerHTML = "&#9664; Back to favorites";
+        }
+
+        BckToNerby.addEventListener("click", () => {
+            if (comingFrom === "Favorites.html") {
+                localStorage.removeItem("comingFrom");
+                window.location.href = "Favorites.html";
+            } else {
+                window.location.href = "NearbyStations.html";
+            }
+        });
     }
 
     const stationName = localStorage.getItem('selectedStationName');

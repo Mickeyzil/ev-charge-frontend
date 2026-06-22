@@ -76,6 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
         logoutConfirmBtn.addEventListener("click", () => {
             // 🔥 מחיקת השם מהדפדפן בעת התנתקות
             localStorage.removeItem("userFullName");
+            localStorage.removeItem("userId");
             window.location.href = "Login.html";
         });
     }
