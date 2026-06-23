@@ -158,7 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         <div class="card-actions">
                             <button class="btn-secondary remove-favorite-btn" type="button">
-                                💔 Remove Favorite
+                                💔 Remove from Favorites
                             </button>
 
                             <button class="btn-primary reserve-btn ${isFull ? "disabled-btn" : ""}" type="button" ${isFull ? "disabled" : ""}>
