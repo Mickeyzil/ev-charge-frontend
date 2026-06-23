@@ -1,40 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EV Charge - Edit Profile</title>
+
     <link rel="stylesheet" href="./CSS/Global.css">
     <link rel="stylesheet" href="./CSS/edit-profile.css">
+
     <script src="./JS/config.js"></script>
-    <script src="./JS/edit-profile.js"></script>
+    <script src="./JS/edit-profile.js" defer></script>
 </head>
+
 <body>
 
     <header class="main-header">
         <nav class="nav-container">
             <div class="logo-container">
-                <img src="./images/Logo.png" alt="EV Charge Logo" class="logo-img">
+                <img src="./Images/Logo.png" alt="EV Charge Logo" class="logo-img">
                 <span class="logo">EV Charge</span>
-            </div>
-            <div class="nav-icons">
-                <span class="icon" id="btn-back">Back</span>
             </div>
         </nav>
     </header>
 
     <main class="main-content">
+
+        <div class="back-navigation">
+            <button class="back-btn" id="btn-back" type="button">
+                &#9664; Back to main menu
+            </button>
+        </div>
+
         <section class="profile-avatar-container">
             <div class="avatar-circle">
                 <span class="avatar-icon">👤</span>
             </div>
         </section>
-        
+
         <div id="notification" class="notification-box hidden"></div>
 
         <form class="booking-form" id="edit-profile-form">
-            
+
             <div class="form-group">
                 <label for="full-name">Full Name</label>
                 <input type="text" id="full-name" placeholder="John Doe" required>
@@ -54,15 +61,17 @@
                 <label for="car-model">Car Model</label>
                 <select id="car-model" required>
                     <option value="" disabled selected>Select your vehicle</option>
-                    <option value="tesla-3">Tesla</option>
-                    <option value="byd-atto">BYD</option>
-                    <option value="hyundai-ioniq">Hyundai</option>
-                    <option value="other">Other EV</option>
+                    <option value="Tesla">Tesla</option>
+                    <option value="BYD">BYD</option>
+                    <option value="Geely">Geely</option>
+                    <option value="MG4">MG4</option>
+                    <option value="Hyundai">Hyundai</option>
+                    <option value="Other">Other</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="current-password">Current Password</label>
+                <label for="old-password">Current Password</label>
                 <input type="password" id="old-password" placeholder="••••••••">
             </div>
 
@@ -71,18 +80,31 @@
                 <input type="password" id="new-password" placeholder="Enter new password">
             </div>
 
-            <button type="submit" class="submit-btn">Save Changes</button>
+            <button type="submit" class="submit-btn">
+                Save Changes
+            </button>
+
         </form>
 
         <div id="back-modal" class="modal-overlay hidden">
             <div class="modal-content">
-            <p>Are you sure you want to leave? Any unsaved changes will be lost.</p>
+                <p>
+                    Are you sure you want to leave?<br>
+                    Any unsaved changes will be lost.
+                </p>
+
                 <div class="modal-buttons">
-                    <button id="cancel-btn" class="secondary-btn">Stay</button>
-                    <button id="confirm-btn" class="primary-btn">Yes, Leave</button>
+                    <button id="cancel-btn" class="secondary-btn">
+                        Stay
+                    </button>
+
+                    <button id="confirm-btn" class="primary-btn">
+                        Yes, Leave
+                    </button>
                 </div>
             </div>
         </div>
+
     </main>
 
     <footer class="main-footer">
@@ -90,5 +112,7 @@
             <p>© 2026 EV Charge. All rights reserved to Mickey Zilberman and Gil Cohen.</p>
         </div>
     </footer>
+
 </body>
+
 </html>

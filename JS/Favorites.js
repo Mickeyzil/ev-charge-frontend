@@ -179,9 +179,11 @@ document.addEventListener("DOMContentLoaded", () => {
                         return;
                     }
 
-                    localStorage.setItem("selectedStationName", station.name);
-                    localStorage.setItem("comingFrom", "Favorites.html");
-                    window.location.href = "Reservation.html";
+                    localStorage.setItem("selectedStationId", station.id);
+localStorage.setItem("selectedStationName", station.name);
+localStorage.setItem("comingFrom", "Favorites.html");
+
+window.location.href = "Reservation.html";
                 });
 
                 removeBtn.addEventListener("click", () => {

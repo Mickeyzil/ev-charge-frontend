@@ -28,12 +28,23 @@
   gap: 25px;
   padding: 0 20px;
 }
-
-#btn-back {
-  margin-right: 15px; 
-  font-weight: bold;  
+.back-navigation {
+  width: 100%;
+  max-width: 600px;
+  margin: 25px auto 20px auto;
+  padding: 0 20px;
+  text-align: left;
 }
 
+#btn-back {
+  font-weight: 800;
+  font-size: 1.05em;
+  color: #1A365D;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px 0;
+}
 .notification-box {
   position: sticky;
   top: 10px;

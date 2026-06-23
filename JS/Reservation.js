@@ -1,24 +1,68 @@
-document.addEventListener('DOMContentLoaded', () => {
-
+document.addEventListener("DOMContentLoaded", () => {
     if (localStorage.getItem("darkMode") === "true") {
         document.body.classList.add("dark-mode");
     }
 
-    const BckToNerby = document.getElementById('back-stations-btn');
-    if (BckToNerby) {
+    const backBtn = document.getElementById("back-stations-btn");
+    const form = document.getElementById("reservation-form");
+
+    const fullNameInput = document.getElementById("full-name");
+    const emailInput = document.getElementById("email");
+    const phoneInput = document.getElementById("phone");
+    const dateInput = document.getElementById("arrival-date");
+    const timeInput = document.getElementById("arrival-time");
+    const carTypeSelect = document.getElementById("car-type");
+    const connectorSelect = document.getElementById("connector-type");
+
+    const stationName = localStorage.getItem("selectedStationName");
+    const stationId = localStorage.getItem("selectedStationId");
+    const userId = localStorage.getItem("userId");
+
+    if (!userId || userId === "undefined" || userId === "null") {
+        alert("Please log in before making a reservation.");
+        window.location.href = "Login.html";
+        return;
+    }
+
+    const today = new Date().toISOString().split("T")[0];
+
+    if (dateInput) {
+        dateInput.min = today;
+    }
+
+    fetch(`${API_URL}/api/users/${userId}`)
+        .then(response => response.json())
+        .then(user => {
+            fullNameInput.value = user.full_name || "";
+            emailInput.value = user.email || "";
+            phoneInput.value = user.phone || "";
+
+            fullNameInput.readOnly = true;
+            emailInput.readOnly = true;
+            phoneInput.readOnly = true;
+
+            if (carTypeSelect && user.car_model) {
+                carTypeSelect.value = user.car_model;
+            }
+        })
+        .catch(error => {
+            console.error("Error loading user data:", error);
+            alert("Failed to load user details. Please login again.");
+            window.location.href = "Login.html";
+        });
+
+    if (backBtn) {
         const comingFrom = localStorage.getItem("comingFrom");
 
-        // 🌟 שלב 1: עדכון הטקסט של הכפתור לפי 3 מקורות ההגעה השונים
         if (comingFrom === "Favorites.html") {
-            BckToNerby.innerHTML = "&#9664; Back to favorites";
+            backBtn.innerHTML = "&#9664; Back to favorites";
         } else if (comingFrom === "map") {
-            BckToNerby.innerHTML = "&#9664; Back to Map View";
+            backBtn.innerHTML = "&#9664; Back to Map View";
         } else {
-            BckToNerby.innerHTML = "&#9664; Back to Nearby Stations";
+            backBtn.innerHTML = "&#9664; Back to Nearby Stations";
         }
 
-        // 🌟 שלב 2: ניתוב דינמי ומחיקת הסימן מה-localStorage בעת החזרה לקודם
-        BckToNerby.addEventListener("click", () => {
+        backBtn.addEventListener("click", () => {
             if (comingFrom === "Favorites.html") {
                 localStorage.removeItem("comingFrom");
                 window.location.href = "Favorites.html";
@@ -31,9 +75,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const stationName = localStorage.getItem('selectedStationName');
     if (stationName) {
-        const formTitle = document.getElementById('form-title');
+        const formTitle = document.getElementById("form-title");
+
         if (formTitle) {
             formTitle.textContent = `Reservation to ${stationName}`;
         }
@@ -53,61 +97,107 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const form = document.getElementById('reservation-form');    
-    if(!form) return;
+    if (!form) return;
 
-    form.addEventListener('submit', (event) => {
+    form.addEventListener("submit", (event) => {
         event.preventDefault();
-        const fullName = document.getElementById('full-name').value.trim();
-        const email = document.getElementById("email").value.trim();
-        const time = document.getElementById('arrival-time').value;
-        const phone = document.getElementById('phone').value.trim();
-        const carModel = document.getElementById('car-type').value;
-        const connectorType = document.getElementById('connector-type').value;
 
-        const namePattern = /^[a-zA-Z\s]+$/;
-        if (!namePattern.test(fullName)) {
-            alert('Please enter a valid full name (letters and spaces only).');
+        const fullName = fullNameInput.value.trim();
+        const email = emailInput.value.trim();
+        const phone = phoneInput.value.trim();
+        const arrivalDate = dateInput.value;
+        const arrivalTime = timeInput.value;
+        const carModel = carTypeSelect.value;
+        const connectorType = connectorSelect.value;
+
+        if (!stationId || stationId === "undefined" || stationId === "null") {
+            alert("Station was not selected correctly. Please choose a station again.");
+            window.location.href = "NearbyStations.html";
             return;
         }
-        const phonePattern = /^[0-9]{9,10}$/;
-        if(!phonePattern.test(phone)) {
-            alert('Please enter a valid phone number (9-10 digits only).');
+
+        if (!arrivalDate) {
+            alert("Please select an arrival date.");
             return;
         }
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailPattern.test(email)) {
-            alert('Please enter a valid email address.');
+
+        if (!arrivalTime) {
+            alert("Please select an arrival time.");
             return;
         }
-        if (!time) {
-            alert('Please select an arrival time.');
+
+        const now = new Date();
+        const selectedDateTime = new Date(`${arrivalDate}T${arrivalTime}`);
+
+        if (selectedDateTime <= now) {
+            alert("Please choose a future date and time.");
             return;
         }
-        if (!carModel) {
-            alert('Please select a car model.');
-            return;
-        }
+
         if (!connectorType) {
-            alert('Please select a connector type.');
+            alert("Please select a connector type.");
             return;
         }
 
-        const mainContent = document.querySelector('.main-content');
-        mainContent.innerHTML = `
-            <div class="welcome-section" style="text-align: center; background-color: #2170FF; color: white; padding: 40px; border-radius: 15px; margin-top: 30px;">
-                <h1>🎉 Reservation Confirmed!</h1>
-                <p>Thank you, <strong>${fullName}</strong>. Your spot has been successfully booked.</p>
-                <p style="margin-top: 10px;">
-                    Your reservation time: <strong>${time}</strong>
-                </p>
-                <p style="margin-top: 10px; font-size: 0.9em;">
-                    A confirmation email was sent to: ${email}
-                </p>
-                <button class="back-btn" onclick="location.href='MainMenu.html'" style="margin-top: 25px; background-color: white; color: #2170FF; padding: 10px 20px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
-                    Back to Main Menu
-                </button>
-            </div>
-        `;
+        if (!carModel) {
+            alert("Please select a car model.");
+            return;
+        }
+
+        fetch(`${API_URL}/api/reservations/create`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                user_id: userId,
+                station_id: stationId,
+                full_name: fullName,
+                email: email,
+                phone: phone,
+                arrival_date: arrivalDate,
+                arrival_time: arrivalTime,
+                car_model: carModel,
+                connector_type: connectorType
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.reservationId && !data.reservation_id && !data.message?.includes("success")) {
+                    alert(data.message || "Failed to create reservation.");
+                    return;
+                }
+
+                const mainContent = document.querySelector(".main-content");
+
+                mainContent.innerHTML = `
+                    <div class="welcome-section" style="text-align: center; background-color: #2170FF; color: white; padding: 40px; border-radius: 15px; margin-top: 30px;">
+                        <h1>🎉 Reservation Confirmed!</h1>
+                        <p>Thank you, <strong>${fullName}</strong>. Your spot has been successfully booked.</p>
+                        <p style="margin-top: 10px;">Station: <strong>${stationName || "Selected Station"}</strong></p>
+                        <p style="margin-top: 10px;">Date: <strong>${arrivalDate}</strong></p>
+                        <p style="margin-top: 10px;">Time: <strong>${arrivalTime}</strong></p>
+                        <p style="margin-top: 10px;">Car: <strong>${carModel}</strong></p>
+                        <p style="margin-top: 10px;">Connector: <strong>${connectorType}</strong></p>
+                        <p style="margin-top: 10px; font-size: 0.9em;">A confirmation email was sent to: ${email}</p>
+
+                        <button class="back-btn" id="back-main-after-reservation" style="margin-top: 25px; background-color: white; color: #2170FF; padding: 10px 20px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                            Back to Main Menu
+                        </button>
+                    </div>
+                `;
+
+                const backMainBtn = document.getElementById("back-main-after-reservation");
+
+                if (backMainBtn) {
+                    backMainBtn.addEventListener("click", () => {
+                        window.location.href = "MainMenu.html";
+                    });
+                }
+            })
+            .catch(error => {
+                console.error("Reservation error:", error);
+                alert("Server error. Please try again later.");
+            });
     });
 });

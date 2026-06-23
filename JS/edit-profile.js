@@ -32,8 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // עדכון בחירה בתיבת select
                 const carSelect = document.getElementById('car-model');
                 if (carSelect && user.car_model) {
-                    carSelect.value = user.car_model.toLowerCase();
-                }
+                carSelect.value = user.car_model;                }
             })
             .catch(err => {
                 console.error("Error loading profile:", err);
