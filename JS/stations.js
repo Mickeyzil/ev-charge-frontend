@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const backMainBtn = document.getElementById("back-main-btn");
     const contactBtn = document.getElementById("contact-btn");
     const settingsBtn = document.getElementById("settings-btn");
+    const container = document.getElementById("stations-container");
 
     if (localStorage.getItem("darkMode") === "true") {
         document.body.classList.add("dark-mode");
@@ -25,20 +26,35 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    if (!container) return;
+
+    // דרישה 1 (עמוד 10): הזרקת מצב טעינה (Spinner) ברגע שהדף עולה ולפני ה-fetch
+    container.innerHTML = `
+        <div class="status-message-container loading-state">
+            <div class="spinner"></div>
+            <p>Loading nearby charging stations... ⏳</p>
+        </div>
+    `;
+
     fetch(`${API_URL}/api/stations`)
         .then(response => {
             if (!response.ok) {
                 throw new Error("Network response was not ok");
             }
-
             return response.json();
         })
         .then(data => {
-            const container = document.getElementById("stations-container");
-
-            if (!container) return;
-
             container.innerHTML = "";
+
+            // דרישה 2 (עמוד 10): הודעה ברורה כאשר אין נתונים להצגה בדאטהבייס
+            if (!data || data.length === 0) {
+                container.innerHTML = `
+                    <div class="status-message-container no-data-state">
+                        <p>🔍 No charging stations available at the moment.</p>
+                    </div>
+                `;
+                return;
+            }
 
             data.forEach(station => {
                 const card = document.createElement("div");
@@ -54,6 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const isFull = station.available[0] === "0";
 
+                // שים לב: צבע הנקודה הדינמי מוזרק פה, אך הוסרו ה-style-ים האסורים מההודעות
                 card.innerHTML = `
                     <div class="station-card-header">
                         <h2 class="station-card-title">${station.name}</h2>
@@ -119,8 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     if (!userId) {
                         messageBox.textContent = "You must be logged in!";
-                        messageBox.classList.remove("hidden");
-                        messageBox.style.color = "red";
+                        messageBox.className = "station-message error-msg"; // שינוי לקלאס מעוצב במקום style קשיח
                         return;
                     }
 
@@ -145,16 +161,14 @@ document.addEventListener("DOMContentLoaded", () => {
                         })
                         .then(data => {
                             messageBox.textContent = `⭐ ${data.message || "Added to favorites!"}`;
-                            messageBox.classList.remove("hidden");
-                            messageBox.style.color = "green";
+                            messageBox.className = "station-message success-msg"; // שינוי לקלאס מעוצב
 
                             favoriteBtn.disabled = true;
                             favoriteBtn.textContent = "❤️ Already in Favorites";
                         })
                         .catch(error => {
                             messageBox.textContent = error.message;
-                            messageBox.classList.remove("hidden");
-                            messageBox.style.color = "red";
+                            messageBox.className = "station-message error-msg"; // שינוי לקלאס מעוצב
 
                             if (error.message === "Station already in favorites") {
                                 favoriteBtn.disabled = true;
@@ -168,5 +182,12 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch(error => {
             console.error("Error loading stations:", error);
+            // דרישה 3 (עמוד 10): הצגת הודעת שגיאה ברורה ויזואלית למשתמש במידה והשרת/דאטהבייס כבויים
+            container.innerHTML = `
+                <div class="status-message-container error-state">
+                    <p>⚠️ Connection Error</p>
+                    <span class="error-details">Unable to load stations. Please verify that the cloud database is running and try again.</span>
+                </div>
+            `;
         });
 });

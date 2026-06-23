@@ -37,19 +37,31 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
+    // דרישה 1: הזרקת מצב טעינה גלובלי (Spinner) מתוך ה-CSS הגלובלי
+    container.innerHTML = `
+        <div class="status-message-container loading-state">
+            <div class="spinner"></div>
+            <p>Loading your favorite stations... ⏳</p>
+        </div>
+    `;
+
     fetch(`${API_URL}/api/favorites/${userId}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error("Failed to fetch favorite stations from server");
             }
-
             return response.json();
         })
         .then(stations => {
             container.innerHTML = "";
 
+            // דרישה 2: חיווי מעוצב ומקצועי למצב שבו אין עדיין מועדפים
             if (!stations || stations.length === 0) {
-                container.innerHTML = "<p class='no-favorites'>You haven't added any favorites yet. ❤️</p>";
+                container.innerHTML = `
+                    <div class="status-message-container no-data-state">
+                        <p>🔍 You haven't added any favorites yet! Go to "Nearby Stations" and click ❤️ to save them.</p>
+                    </div>
+                `;
                 return;
             }
 
@@ -60,6 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 let connectors = [];
                 let amenities = [];
 
+                // שימור מלא של הלוגיקה המקורית שלך לפירוק המערכים מהדאטהבייס
                 try {
                     if (typeof station.connectors === "string") {
                         if (station.connectors.trim().startsWith("[")) {
@@ -102,6 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     .map(amenity => `<span class="tag-item">${amenity}</span>`)
                     .join("");
 
+                // שימוש בשמות המשתנים המקוריים והנכונים שלכם מהשרת וה-DB
                 const availableSlots = station.available_slots !== undefined
                     ? parseInt(station.available_slots)
                     : 0;
@@ -113,13 +127,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 const isFull = availableSlots === 0;
 
                 let statusColor = "#FFB300";
-
                 if (availableSlots === 0) {
                     statusColor = "#E53935";
                 } else if (availableSlots === totalSlots) {
                     statusColor = "#00B050";
                 }
 
+                // בניית מבנה הכרטיסייה
                 card.innerHTML = `
                     <div class="station-card-header">
                         <h2 class="station-card-title">${station.name || "Unknown Station"}</h2>
@@ -172,51 +186,70 @@ document.addEventListener("DOMContentLoaded", () => {
                 const removeBtn = card.querySelector(".remove-favorite-btn");
                 const messageBox = card.querySelector(".station-message");
 
-                reserveBtn.addEventListener("click", () => {
-                    if (isFull) {
-                        messageBox.textContent = `${station.name} is fully booked. Please choose another station.`;
-                        messageBox.classList.remove("hidden");
-                        return;
-                    }
+                if (reserveBtn) {
+                    reserveBtn.addEventListener("click", () => {
+                        if (isFull) {
+                            messageBox.textContent = `${station.name} is fully booked. Please choose another station.`;
+                            messageBox.className = "station-message error-msg"; // שימוש בקלאס גלובלי נקי
+                            messageBox.classList.remove("hidden");
+                            return;
+                        }
 
-                    localStorage.setItem("selectedStationId", station.id);
-localStorage.setItem("selectedStationName", station.name);
-localStorage.setItem("comingFrom", "Favorites.html");
+                        localStorage.setItem("selectedStationId", station.id);
+                        localStorage.setItem("selectedStationName", station.name);
+                        localStorage.setItem("comingFrom", "Favorites.html");
+                        window.location.href = "Reservation.html";
+                    });
+                }
 
-window.location.href = "Reservation.html";
-                });
-
-                removeBtn.addEventListener("click", () => {
-                    fetch(`${API_URL}/api/favorites/remove`, {
-                        method: "DELETE",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                       body: JSON.stringify({
-    user_id: userId,
-    station_id: station.id
-})
-                    })
-                        .then(response => response.json())
+                if (removeBtn) {
+                    removeBtn.addEventListener("click", () => {
+                        fetch(`${API_URL}/api/favorites/remove`, {
+                            method: "DELETE",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                user_id: userId,
+                                station_id: station.id
+                            })
+                        })
+                        .then(response => {
+                            if (!response.ok) throw new Error("Failed to remove favorite");
+                            return response.json();
+                        })
                         .then(() => {
                             card.remove();
 
+                            // אם הסרנו את התחנה האחרונה, נחזיר את חיווי ה-Empty State המעוצב
                             if (container.children.length === 0) {
-                                container.innerHTML = "<p class='no-favorites'>You haven't added any favorites yet. ❤️</p>";
+                                container.innerHTML = `
+                                    <div class="status-message-container no-data-state">
+                                        <p>🔍 You haven't added any favorites yet! Go to "Nearby Stations" and click ❤️ to save them.</p>
+                                    </div>
+                                `;
                             }
                         })
                         .catch(error => {
                             console.error("Error removing favorite:", error);
                             messageBox.textContent = "Failed to remove station from favorites.";
+                            messageBox.className = "station-message error-msg"; // שימוש בקלאס גלובלי נקי
                             messageBox.classList.remove("hidden");
                         });
-                });
+                    });
+                }
 
                 container.appendChild(card);
             });
         })
         .catch(error => {
             console.error("Error loading favorite stations:", error);
-            container.innerHTML = "<p class='error-message'>Error loading favorites. Please try again later.</p>";
+            // דרישה 3: חיווי שגיאה גלובלי ומעוצב במקרה של שרת/DB כבויים
+            container.innerHTML = `
+                <div class="status-message-container error-state">
+                    <p>⚠️ Connection Error</p>
+                    <span class="error-details">Unable to load your favorites. Please verify that the cloud database is running and try again.</span>
+                </div>
+            `;
         });
 });

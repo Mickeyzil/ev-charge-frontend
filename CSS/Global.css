@@ -331,3 +331,91 @@ body.dark-mode #logout-cancel-btn {
     background-color: #444444 !important;
     color: #ffffff !important;
 }
+
+/* ==========================================================================
+   רכיבי חיווי סטטוס גלובליים לפעולות שרת (טעינה, שגיאה, חוסר נתונים)
+   ========================================================================== */
+
+/* קובית המידע המרכזית שמחליפה את התוכן בזמן המתנה או תקלה */
+.status-message-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px;
+  background-color: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+  width: 90%;
+  margin: 30px auto;
+}
+
+/* עיצוב הטקסט במצב טעינה */
+.loading-state p {
+  font-weight: bold;
+  color: #2170FF;
+  margin-top: 15px;
+}
+
+/* עיצוב הטקסט במצב שאין נתונים להצגה (למשל מועדפים ריקים) */
+.no-data-state p {
+  font-weight: bold;
+  color: #555555;
+  font-size: 1.1em;
+}
+
+/* עיצוב במצב של שגיאת תקשורת / שרת כבוי */
+.error-state p {
+  font-weight: bold;
+  color: #D32F2F;
+  font-size: 1.2em;
+  margin-bottom: 8px;
+}
+
+.error-details {
+  color: #777777;
+  font-size: 0.95em;
+}
+
+/* אלמנט ה-Spinner המסתובב */
+.spinner {
+  width: 45px;
+  height: 45px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #2170FF; /* הצבע הכחול של המותג שלכם */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* האנימציה שמסובבת את ה-Spinner */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   עיצוב גלובלי עבור הודעות בתוך כרטיסיות (במקום Inline Style ב-JS)
+   ========================================================================== */
+.station-message {
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 10px;
+  font-weight: bold;
+  font-size: 0.9em;
+  text-align: center;
+}
+
+/* הודעת הצלחה (למשל: "נוסף למועדפים!") */
+.station-message.success-msg {
+  background-color: #E8F5E9;
+  color: #2E7D32;
+  border: 1px solid #2E7D32;
+}
+
+/* הודעת שגיאה מקומית */
+.station-message.error-msg {
+  background-color: #FFEAEA;
+  color: #D32F2F;
+  border: 1px solid #D32F2F;
+}

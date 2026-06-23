@@ -65,31 +65,40 @@
             <div id="leaflet-map" class="leaflet-map"></div>
 
             <div class="map-info-card" id="map-info-card">
-                <h2 id="station-name">Select a station</h2>
-                <p id="station-details">Click on one of the charging icons on the map.</p>
-
-                <div class="map-info-row">
-                    <span>Available:</span>
-                    <strong id="station-available">-</strong>
+                <div id="map-status-container" class="status-message-container">
+                    <div class="spinner"></div>
+                    <p>Loading interactive map stations... ⏳</p>
                 </div>
 
-                <div class="map-info-row">
-                    <span>Power:</span>
-                    <strong id="station-power">-</strong>
+                <div id="map-card-content" class="hidden">
+                    <h2 id="station-name">Select a station</h2>
+                    <p id="station-details">Click on one of the charging icons on the map.</p>
+
+                    <div class="map-info-row">
+                        <span>Available:</span>
+                        <strong id="station-available">-</strong>
+                    </div>
+
+                    <div class="map-info-row">
+                        <span>Power:</span>
+                        <strong id="station-power">-</strong>
+                    </div>
+
+                    <div class="map-info-row">
+                        <span>Price:</span>
+                        <strong id="station-price">-</strong>
+                    </div>
+
+                    <p class="station-message hidden" id="map-card-message"></p>
+
+                    <button class="map-reserve-btn" id="map-reserve-btn" disabled>
+                        Make a Reservation
+                    </button>
+
+                    <button class="map-favorite-btn" id="map-favorite-btn">
+                        ☆ Add to Favorites
+                    </button>
                 </div>
-
-                <div class="map-info-row">
-                    <span>Price:</span>
-                    <strong id="station-price">-</strong>
-                </div>
-
-                <button class="map-reserve-btn" id="map-reserve-btn" disabled>
-                    Make a Reservation
-                </button>
-
-                <button class="map-favorite-btn" id="map-favorite-btn">
-                    ⭐ Add to Favorites
-                </button>
             </div>
         </section>
     </main>

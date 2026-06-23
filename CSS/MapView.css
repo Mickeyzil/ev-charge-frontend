@@ -378,3 +378,78 @@
   background-color: #e6b800;
   color: #000000;
 }
+
+/* ===== Global Status & Message Styles (Shenkar UX Standards) ===== */
+.status-message-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 15px;
+  color: #1A365D;
+  font-weight: bold;
+}
+
+.no-data-state {
+  color: #555555;
+  font-size: 1.05em;
+  font-weight: bold;
+  text-align: center;
+  padding: 30px 10px;
+}
+
+.error-state p {
+  color: #d32f2f;
+  font-size: 1.2em;
+  margin: 0 0 8px 0;
+  font-weight: 800;
+}
+
+.error-details {
+  font-size: 0.85em;
+  color: #666666;
+  font-weight: normal;
+}
+
+/* Spinner Animation */
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #2170FF;
+  border-radius: 50%;
+  animation: spinMap 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+@keyframes spinMap {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Action item messages */
+.station-message {
+  font-size: 0.9em;
+  margin: 15px 0;
+  text-align: center;
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.station-message.success-msg {
+  color: #00B050;
+  background-color: #e6f7ed;
+  border: 1px solid #b3e6c9;
+}
+
+.station-message.error-msg {
+  color: #d32f2f;
+  background-color: #ffebeb;
+  border: 1px solid #ffccd2;
+}
+
+.hidden {
+  display: none;
+}

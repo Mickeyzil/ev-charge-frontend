@@ -17,6 +17,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const stationPower = document.getElementById("station-power");
     const stationPrice = document.getElementById("station-price");
 
+    // אלמנטים החדשים לניהול סטטוסים וחיווי משתמש
+    const mapStatusContainer = document.getElementById("map-status-container");
+    const mapCardContent = document.getElementById("map-card-content");
+    const mapCardMessage = document.getElementById("map-card-message");
+
     let selectedStation = null;
     let stationsData = [];
     let markerObjects = [];
@@ -43,16 +48,35 @@ document.addEventListener("DOMContentLoaded", () => {
         fetch(`${API_URL}/api/favorites/${userId}`)
             .then(res => res.json())
             .then(favorites => {
-                userFavorites = favorites.map(fav => fav.favorite_id);
+                userFavorites = favorites.map(fav => fav.favorite_id || fav.station_id || fav.id);
             })
             .catch(err => console.error("Error loading user favorites:", err));
     }
 
     // משיכת כל התחנות להצגה על המפה
     fetch(`${API_URL}/api/stations`)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Failed to fetch stations from server");
+            }
+            return response.json();
+        })
         .then(stations => {
             stationsData = stations; 
+
+            // דרישה: חיווי כאשר אין נתונים זמינים במערכת (Empty State)
+            if (!stationsData || stationsData.length === 0) {
+                mapStatusContainer.innerHTML = `
+                    <div class="no-data-state">
+                        <p>🔍 No charging stations found in the system database.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // העלמת מצב הטעינה וחשיפת תוכן הכרטיסייה
+            mapStatusContainer.classList.add("hidden");
+            mapCardContent.classList.remove("hidden");
 
             stationsData.forEach(station => {
                 const status = getStationStatus(station);
@@ -89,9 +113,17 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch(error => {
             console.error("Error loading map stations from server:", error);
+            // דרישה: הצגת הודעת שגיאה מעוצבת במקרה של שרת/DB כבויים
+            mapStatusContainer.innerHTML = `
+                <div class="error-state">
+                    <p>⚠️ Connection Error</p>
+                    <span class="error-details">Unable to connect to the server. Please verify your internet connection or cloud database status.</span>
+                </div>
+            `;
         });
 
     function getStationStatus(station) {
+        if (!station.available) return "available";
         const parts = station.available.split("/");
         const available = Number(parts[0]);
         const total = Number(parts[1]);
@@ -122,19 +154,28 @@ document.addEventListener("DOMContentLoaded", () => {
     // פונקציית בחירת תחנה מהמפה
     function selectStation(station) {
         selectedStation = station;
+        
+        // ניקוי הודעות קודמות בכרטיסייה
+        mapCardMessage.classList.add("hidden");
 
-        stationName.textContent = station.name;
-        stationDetails.textContent = `${station.connectors.join(", ")} · ${station.amenities.join(", ")}`;
-        stationAvailable.textContent = station.available;
-        stationPower.textContent = station.power;
-        stationPrice.textContent = station.price;
+        stationName.textContent = station.name || "Unknown Station";
+        
+        const connectorsList = Array.isArray(station.connectors) ? station.connectors.join(", ") : (station.connectors || "Type 2");
+        const amenitiesList = Array.isArray(station.amenities) ? station.amenities.join(", ") : (station.amenities || "WiFi");
+        stationDetails.textContent = `${connectorsList} · ${amenitiesList}`;
+        
+        stationAvailable.textContent = station.available || "0/0";
+        stationPower.textContent = station.power || "50 kW";
+        stationPrice.textContent = station.price || "0.0";
 
-        const isFull = station.available.startsWith("0");
+        const isFull = station.available ? station.available.startsWith("0") : true;
         reserveBtn.disabled = isFull;
-        reserveBtn.textContent = isFull ? "Fully Booked" : "Make a Reservation";
+        reserveBtn.textContent = isFull ? "❌ Fully Booked" : "📅 Make a Reservation";
 
-        // עדכון דינמי של כפתור המועדפים בהתאם לתחנה שנבחרה
-        if (userFavorites.includes(station.station_id)) {
+        // סנכרון תעודות הזהות (תומך גם ב-station_id וגם ב-id המקורי)
+        const currentStationId = station.station_id || station.id;
+
+        if (userFavorites.includes(currentStationId)) {
             favoriteBtn.innerHTML = "⭐ Remove from Favorites";
             favoriteBtn.classList.add("active");
         } else {
@@ -163,35 +204,30 @@ document.addEventListener("DOMContentLoaded", () => {
         reserveBtn.addEventListener("click", () => {
             if (!selectedStation) return;
 
-            localStorage.setItem("selectedStationId", selectedStation.station_id);
+            localStorage.setItem("selectedStationId", selectedStation.station_id || selectedStation.id);
             localStorage.setItem("selectedStationName", selectedStation.name);
-            localStorage.setItem("comingFrom", "map");
+            localStorage.setItem("comingFrom", "MapView.html");
             
             window.location.href = "Reservation.html";
         });
     }
 
-    // 🌟 הטיפול בכפתור המועדפים ללא שום alert() 
+    // הטיפול בכפתור המועדפים ללא שום alert() תוך שימוש בקלאסים מעוצבים
     if (favoriteBtn) {
         favoriteBtn.addEventListener("click", () => {
             if (!selectedStation) return;
             
-            // 1. הגנה במקרה שהמשתמש לא מחובר - שינוי זמני של מראה הכפתור
+            const currentStationId = selectedStation.station_id || selectedStation.id;
+            
+            // 1. הגנה מקצועית מובנית במידה והמשתמש לא מחובר
             if (!userId) {
-                const originalHtml = favoriteBtn.innerHTML;
-                favoriteBtn.innerHTML = "⚠️ Please Log In First";
-                favoriteBtn.style.color = "#D32F2F";
-                favoriteBtn.style.borderColor = "#D32F2F";
-                
-                setTimeout(() => {
-                    favoriteBtn.innerHTML = originalHtml;
-                    favoriteBtn.style.color = "";
-                    favoriteBtn.style.borderColor = "";
-                }, 2500);
+                mapCardMessage.textContent = "⚠️ Please log in before saving favorites.";
+                mapCardMessage.className = "station-message error-msg";
+                mapCardMessage.classList.remove("hidden");
                 return;
             }
 
-            const isAlreadyFavorite = userFavorites.includes(selectedStation.station_id);
+            const isAlreadyFavorite = userFavorites.includes(currentStationId);
             
             const targetUrl = isAlreadyFavorite 
                 ? `${API_URL}/api/favorites/remove` 
@@ -202,39 +238,44 @@ document.addEventListener("DOMContentLoaded", () => {
             fetch(targetUrl, {
                 method: targetMethod,
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ user_id: userId, station_id: selectedStation.station_id })
+                body: JSON.stringify({ user_id: userId, station_id: currentStationId })
             })
             .then(res => {
                 if (!res.ok) {
-                    throw new Error(`Server responded with status ${res.status}`);
+                    throw new Error(`Server error: ${res.status}`);
                 }
                 return res.json();
             })
             .then(data => {
                 if (isAlreadyFavorite) {
-                    userFavorites = userFavorites.filter(id => id !== selectedStation.station_id);
+                    userFavorites = userFavorites.filter(id => id !== currentStationId);
                     favoriteBtn.innerHTML = "☆ Add to Favorites";
                     favoriteBtn.classList.remove("active");
+                    
+                    mapCardMessage.textContent = "💔 Removed from your favorites.";
+                    mapCardMessage.className = "station-message success-msg";
+                    mapCardMessage.classList.remove("hidden");
                 } else {
-                    userFavorites.push(selectedStation.station_id);
+                    userFavorites.push(currentStationId);
                     favoriteBtn.innerHTML = "⭐ Remove from Favorites";
                     favoriteBtn.classList.add("active");
+                    
+                    mapCardMessage.textContent = "⭐ Added to your favorites successfully!";
+                    mapCardMessage.className = "station-message success-msg";
+                    mapCardMessage.classList.remove("hidden");
                 }
+                
+                // העלמה אוטומטית של הודעת ההצלחה לאחר 3 שניות לחוויית שימוש נקייה
+                setTimeout(() => {
+                    mapCardMessage.classList.add("hidden");
+                }, 3000);
             })
             .catch(err => {
                 console.error("Error updating favorites:", err);
-                
-                // 2. הגנה במקרה של שגיאת תקשורת/שרת - חיווי אדום זמני על הכפתור
-                const originalHtml = favoriteBtn.innerHTML;
-                favoriteBtn.innerHTML = "⚠️ Connection Error";
-                favoriteBtn.style.color = "#D32F2F";
-                favoriteBtn.style.borderColor = "#D32F2F";
-                
-                setTimeout(() => {
-                    favoriteBtn.innerHTML = originalHtml;
-                    favoriteBtn.style.color = "";
-                    favoriteBtn.style.borderColor = "";
-                }, 2500);
+                // חיווי שגיאת רשת פנימי בתוך תיבת ההודעות
+                mapCardMessage.textContent = "⚠️ Connection Error. Failed to sync favorites.";
+                mapCardMessage.className = "station-message error-msg";
+                mapCardMessage.classList.remove("hidden");
             });
         });
     }

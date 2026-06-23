@@ -176,3 +176,69 @@
 .form-group select:focus {
   outline: 3px solid #2170FF;
 }
+
+/* באנר הודעות המערכת במקום alert */
+.message-banner {
+    padding: 12px;
+    margin: 15px 0;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+.message-banner.hidden {
+    display: none;
+}
+.error-msg {
+    background-color: #ffebee;
+    color: #c62828;
+    border: 1px solid #ffcdd2;
+}
+.success-msg {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #c8e6c9;
+}
+
+/* כרטיסיית אישור ההזמנה החדשה */
+.confirmation-card {
+    text-align: center;
+    background-color: #2170FF;
+    color: white;
+    padding: 40px;
+    border-radius: 15px;
+    margin-top: 30px;
+}
+.confirmation-details {
+    margin: 20px 0;
+}
+.confirmation-details p {
+    margin: 10px 0;
+}
+.confirmation-email-tip {
+    margin-top: 10px;
+    font-size: 0.9em;
+    opacity: 0.9;
+}
+.back-menu-btn {
+    margin-top: 25px;
+    background-color: white;
+    color: #2170FF;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.back-menu-btn:hover {
+    background-color: #f0f4ff;
+}
+
+/* עיצוב כפתור טעון/נעול */
+.submit-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.8;
+}

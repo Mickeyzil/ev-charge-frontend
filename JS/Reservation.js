@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const backBtn = document.getElementById("back-stations-btn");
     const form = document.getElementById("reservation-form");
+    const submitBtn = document.getElementById("submit-reservation-btn");
+    const messageBanner = document.getElementById("message-banner");
 
     const fullNameInput = document.getElementById("full-name");
     const emailInput = document.getElementById("email");
@@ -18,17 +20,29 @@ document.addEventListener("DOMContentLoaded", () => {
     const stationId = localStorage.getItem("selectedStationId");
     const userId = localStorage.getItem("userId");
 
+    // פונקציית עזר חלופית ל-alert המציגה באנר מעוצב באתר
+    function showMessage(text, isSuccess = false) {
+        if (!messageBanner) return;
+        messageBanner.textContent = text;
+        messageBanner.className = `message-banner ${isSuccess ? "success-msg" : "error-msg"}`;
+        messageBanner.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
     if (!userId || userId === "undefined" || userId === "null") {
-        alert("Please log in before making a reservation.");
-        window.location.href = "Login.html";
+        showMessage("Please log in before making a reservation. Redirecting...");
+        setTimeout(() => {
+            window.location.href = "Login.html";
+        }, 3000);
         return;
     }
 
     const today = new Date().toISOString().split("T")[0];
-
     if (dateInput) {
         dateInput.min = today;
     }
+
+    // חיווי טעינה קטן בזמן משיכת פרטי המשתמש
+    if (fullNameInput) fullNameInput.placeholder = "Loading user profile...";
 
     fetch(`${API_URL}/api/users/${userId}`)
         .then(response => response.json())
@@ -47,8 +61,10 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch(error => {
             console.error("Error loading user data:", error);
-            alert("Failed to load user details. Please login again.");
-            window.location.href = "Login.html";
+            showMessage("Failed to load user details. Please login again.");
+            setTimeout(() => {
+                window.location.href = "Login.html";
+            }, 3000);
         });
 
     if (backBtn) {
@@ -77,7 +93,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (stationName) {
         const formTitle = document.getElementById("form-title");
-
         if (formTitle) {
             formTitle.textContent = `Reservation to ${stationName}`;
         }
@@ -111,18 +126,20 @@ document.addEventListener("DOMContentLoaded", () => {
         const connectorType = connectorSelect.value;
 
         if (!stationId || stationId === "undefined" || stationId === "null") {
-            alert("Station was not selected correctly. Please choose a station again.");
-            window.location.href = "NearbyStations.html";
+            showMessage("Station selection error. Redirecting to stations list...");
+            setTimeout(() => {
+                window.location.href = "NearbyStations.html";
+            }, 3000);
             return;
         }
 
         if (!arrivalDate) {
-            alert("Please select an arrival date.");
+            showMessage("Please select an arrival date.");
             return;
         }
 
         if (!arrivalTime) {
-            alert("Please select an arrival time.");
+            showMessage("Please select an arrival time.");
             return;
         }
 
@@ -130,19 +147,24 @@ document.addEventListener("DOMContentLoaded", () => {
         const selectedDateTime = new Date(`${arrivalDate}T${arrivalTime}`);
 
         if (selectedDateTime <= now) {
-            alert("Please choose a future date and time.");
+            showMessage("Please choose a future date and time.");
             return;
         }
 
         if (!connectorType) {
-            alert("Please select a connector type.");
+            showMessage("Please select a connector type.");
             return;
         }
 
         if (!carModel) {
-            alert("Please select a car model.");
+            showMessage("Please select a car model.");
             return;
         }
+
+        // 🌟 מימוש מצב טעינה (Loading State) לפני הפנייה לשרת
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Booking your spot... ⏳";
+        if (messageBanner) messageBanner.classList.add("hidden");
 
         fetch(`${API_URL}/api/reservations/create`, {
             method: "POST",
@@ -164,31 +186,35 @@ document.addEventListener("DOMContentLoaded", () => {
             .then(response => response.json())
             .then(data => {
                 if (!data.reservationId && !data.reservation_id && !data.message?.includes("success")) {
-                    alert(data.message || "Failed to create reservation.");
+                    showMessage(data.message || "Failed to create reservation.");
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = "Confirm Reservation";
                     return;
                 }
 
                 const mainContent = document.querySelector(".main-content");
 
+                // עיצוב נקי ללא הזרקת מאפייני style="" ישירים בקוד
                 mainContent.innerHTML = `
-                    <div class="welcome-section" style="text-align: center; background-color: #2170FF; color: white; padding: 40px; border-radius: 15px; margin-top: 30px;">
+                    <div class="welcome-section confirmation-card">
                         <h1>🎉 Reservation Confirmed!</h1>
                         <p>Thank you, <strong>${fullName}</strong>. Your spot has been successfully booked.</p>
-                        <p style="margin-top: 10px;">Station: <strong>${stationName || "Selected Station"}</strong></p>
-                        <p style="margin-top: 10px;">Date: <strong>${arrivalDate}</strong></p>
-                        <p style="margin-top: 10px;">Time: <strong>${arrivalTime}</strong></p>
-                        <p style="margin-top: 10px;">Car: <strong>${carModel}</strong></p>
-                        <p style="margin-top: 10px;">Connector: <strong>${connectorType}</strong></p>
-                        <p style="margin-top: 10px; font-size: 0.9em;">A confirmation email was sent to: ${email}</p>
+                        <div class="confirmation-details">
+                            <p>Station: <strong>${stationName || "Selected Station"}</strong></p>
+                            <p>Date: <strong>${arrivalDate}</strong></p>
+                            <p>Time: <strong>${arrivalTime}</strong></p>
+                            <p>Car: <strong>${carModel}</strong></p>
+                            <p>Connector: <strong>${connectorType}</strong></p>
+                        </div>
+                        <p class="confirmation-email-tip">A confirmation email was sent to: ${email}</p>
 
-                        <button class="back-btn" id="back-main-after-reservation" style="margin-top: 25px; background-color: white; color: #2170FF; padding: 10px 20px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                        <button class="back-btn back-menu-btn" id="back-main-after-reservation">
                             Back to Main Menu
                         </button>
                     </div>
                 `;
 
                 const backMainBtn = document.getElementById("back-main-after-reservation");
-
                 if (backMainBtn) {
                     backMainBtn.addEventListener("click", () => {
                         window.location.href = "MainMenu.html";
@@ -197,7 +223,9 @@ document.addEventListener("DOMContentLoaded", () => {
             })
             .catch(error => {
                 console.error("Reservation error:", error);
-                alert("Server error. Please try again later.");
+                showMessage("Server error. Please try again later.");
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Confirm Reservation";
             });
     });
 });
