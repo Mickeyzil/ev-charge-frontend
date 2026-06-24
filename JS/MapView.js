@@ -17,7 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const stationPower = document.getElementById("station-power");
     const stationPrice = document.getElementById("station-price");
 
-    // אלמנטים החדשים לניהול סטטוסים וחיווי משתמש
     const mapStatusContainer = document.getElementById("map-status-container");
     const mapCardContent = document.getElementById("map-card-content");
     const mapCardMessage = document.getElementById("map-card-message");
@@ -35,7 +34,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // אתחול המפה על מרכז הארץ
     const map = L.map("leaflet-map").setView([31.8, 35.0], 7);
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -43,7 +41,6 @@ document.addEventListener("DOMContentLoaded", () => {
         attribution: "© OpenStreetMap"
     }).addTo(map);
 
-    // טעינת המועדפים מהשרת
     if (userId) {
         fetch(`${API_URL}/api/favorites/${userId}`)
             .then(res => res.json())
@@ -53,7 +50,6 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch(err => console.error("Error loading user favorites:", err));
     }
 
-    // משיכת כל התחנות להצגה על המפה
     fetch(`${API_URL}/api/stations`)
         .then(response => {
             if (!response.ok) {
@@ -64,7 +60,6 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(stations => {
             stationsData = stations; 
 
-            // דרישה: חיווי כאשר אין נתונים זמינים במערכת (Empty State)
             if (!stationsData || stationsData.length === 0) {
                 mapStatusContainer.innerHTML = `
                     <div class="no-data-state">
@@ -74,7 +69,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            // העלמת מצב הטעינה וחשיפת תוכן הכרטיסייה
             mapStatusContainer.classList.add("hidden");
             mapCardContent.classList.remove("hidden");
 
@@ -113,7 +107,6 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch(error => {
             console.error("Error loading map stations from server:", error);
-            // דרישה: הצגת הודעת שגיאה מעוצבת במקרה של שרת/DB כבויים
             mapStatusContainer.innerHTML = `
                 <div class="error-state">
                     <p>⚠️ Connection Error</p>
@@ -151,11 +144,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // פונקציית בחירת תחנה מהמפה
     function selectStation(station) {
         selectedStation = station;
         
-        // ניקוי הודעות קודמות בכרטיסייה
         mapCardMessage.classList.add("hidden");
 
         stationName.textContent = station.name || "Unknown Station";
@@ -172,7 +163,6 @@ document.addEventListener("DOMContentLoaded", () => {
         reserveBtn.disabled = isFull;
         reserveBtn.textContent = isFull ? "❌ Fully Booked" : "📅 Make a Reservation";
 
-        // סנכרון תעודות הזהות (תומך גם ב-station_id וגם ב-id המקורי)
         const currentStationId = station.station_id || station.id;
 
         if (userFavorites.includes(currentStationId)) {
@@ -212,14 +202,12 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // הטיפול בכפתור המועדפים ללא שום alert() תוך שימוש בקלאסים מעוצבים
     if (favoriteBtn) {
         favoriteBtn.addEventListener("click", () => {
             if (!selectedStation) return;
             
             const currentStationId = selectedStation.station_id || selectedStation.id;
             
-            // 1. הגנה מקצועית מובנית במידה והמשתמש לא מחובר
             if (!userId) {
                 mapCardMessage.textContent = "⚠️ Please log in before saving favorites.";
                 mapCardMessage.className = "station-message error-msg";
@@ -265,14 +253,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     mapCardMessage.classList.remove("hidden");
                 }
                 
-                // העלמה אוטומטית של הודעת ההצלחה לאחר 3 שניות לחוויית שימוש נקייה
                 setTimeout(() => {
                     mapCardMessage.classList.add("hidden");
                 }, 3000);
             })
             .catch(err => {
                 console.error("Error updating favorites:", err);
-                // חיווי שגיאת רשת פנימי בתוך תיבת ההודעות
                 mapCardMessage.textContent = "⚠️ Connection Error. Failed to sync favorites.";
                 mapCardMessage.className = "station-message error-msg";
                 mapCardMessage.classList.remove("hidden");

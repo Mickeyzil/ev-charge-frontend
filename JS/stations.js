@@ -28,7 +28,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!container) return;
 
-    // דרישה 1 (עמוד 10): הזרקת מצב טעינה (Spinner) ברגע שהדף עולה ולפני ה-fetch
     container.innerHTML = `
         <div class="status-message-container loading-state">
             <div class="spinner"></div>
@@ -46,7 +45,6 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(data => {
             container.innerHTML = "";
 
-            // דרישה 2 (עמוד 10): הודעה ברורה כאשר אין נתונים להצגה בדאטהבייס
             if (!data || data.length === 0) {
                 container.innerHTML = `
                     <div class="status-message-container no-data-state">
@@ -70,7 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const isFull = station.available[0] === "0";
 
-                // שים לב: צבע הנקודה הדינמי מוזרק פה, אך הוסרו ה-style-ים האסורים מההודעות
                 card.innerHTML = `
                     <div class="station-card-header">
                         <h2 class="station-card-title">${station.name}</h2>
@@ -136,7 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     if (!userId) {
                         messageBox.textContent = "You must be logged in!";
-                        messageBox.className = "station-message error-msg"; // שינוי לקלאס מעוצב במקום style קשיח
+                        messageBox.className = "station-message error-msg"; 
                         return;
                     }
 
@@ -161,14 +158,14 @@ document.addEventListener("DOMContentLoaded", () => {
                         })
                         .then(data => {
                             messageBox.textContent = `⭐ ${data.message || "Added to favorites!"}`;
-                            messageBox.className = "station-message success-msg"; // שינוי לקלאס מעוצב
+                            messageBox.className = "station-message success-msg"; 
 
                             favoriteBtn.disabled = true;
                             favoriteBtn.textContent = "❤️ Already in Favorites";
                         })
                         .catch(error => {
                             messageBox.textContent = error.message;
-                            messageBox.className = "station-message error-msg"; // שינוי לקלאס מעוצב
+                            messageBox.className = "station-message error-msg"; 
 
                             if (error.message === "Station already in favorites") {
                                 favoriteBtn.disabled = true;
@@ -182,7 +179,6 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch(error => {
             console.error("Error loading stations:", error);
-            // דרישה 3 (עמוד 10): הצגת הודעת שגיאה ברורה ויזואלית למשתמש במידה והשרת/דאטהבייס כבויים
             container.innerHTML = `
                 <div class="status-message-container error-state">
                     <p>⚠️ Connection Error</p>

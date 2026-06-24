@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const settingsBtn = document.getElementById('settings-btn');
     const contactBtn = document.getElementById('contact-btn');
 
-    // 1. ניווט בכפתורי ה-Header
     if (settingsBtn) {
         settingsBtn.addEventListener("click", () => {
             window.location.href = "Settings.html";
@@ -24,12 +23,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 2. ניהול טופס ההרשמה מול השרת
     if (registerForm) {
         registerForm.addEventListener("submit", (event) => {
             event.preventDefault();
 
-            // שליפת ערכים מהטופס
             const fullName = document.getElementById("full-name").value.trim();
             const email = document.getElementById("email").value.trim();
             const phone = document.getElementById("phone").value.trim();
@@ -37,7 +34,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const confirmPassword = document.getElementById("confirm-password").value.trim();
             const carModel = document.getElementById("car-model").value; 
 
-            // תבניות בדיקה (Regex)
             const namePattern = /^[A-Za-z\s]{2,}$/;
             const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             const phonePattern = /^\+?[0-9\s-]{9,15}$/; 
@@ -45,7 +41,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             hideMessage();
 
-            // וולידציה בצד הלקוח
             if (!fullName || !email || !phone || !password || !confirmPassword || !carModel) {
                 showMessage("Please fill all fields.", "error");
                 return;
@@ -76,7 +71,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            // 🔥 שליחת כל 5 השדות לשרת ה-Node.js כדי שישמור ב-MySQL
+            const spinner = document.getElementById("loading-spinner");
+            const registerBtn = registerForm.querySelector(".register-btn");
+
+            if (spinner) spinner.classList.remove("hidden");
+            if (registerBtn) {
+                registerBtn.disabled = true;
+                registerBtn.innerText = "Creating Account...";
+            }
+
             fetch(`${API_URL}/api/users/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -88,26 +91,41 @@ document.addEventListener("DOMContentLoaded", () => {
                     car_model: carModel 
                 })
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(errData => {
+                        throw new Error(errData.message || "Registration failed");
+                    });
+                }
+                return response.json();
+            })
             .then(data => {
-                // בדיקה אם הודעת ההצלחה מהשרת מכילה את המילה המבוקשת
                 if (data.message && data.message.includes('successfully')) {
                     showMessage("Account created successfully! Redirecting to login...", "success");
                     setTimeout(() => {
                         window.location.href = "Login.html";
                     }, 1200);
                 } else {
+                    if (spinner) spinner.classList.add("hidden");
+                    if (registerBtn) {
+                        registerBtn.disabled = false;
+                        registerBtn.innerText = "Create Account";
+                    }
                     showMessage(data.message || "Registration failed", "error");
                 }
             })
             .catch(err => {
+                if (spinner) spinner.classList.add("hidden");
+                if (registerBtn) {
+                    registerBtn.disabled = false;
+                    registerBtn.innerText = "Create Account";
+                }
                 console.error('Error during fetch:', err);
-                showMessage("Server error, please try again later", "error");
+                showMessage(err.message || "Server error, please try again later", "error");
             }); 
         });
     }
 
-    // 3. פונקציות עזר להצגת הודעות
     function showMessage(message, type) {
         if (messageBox) {
             messageBox.textContent = message;

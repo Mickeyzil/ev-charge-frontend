@@ -20,7 +20,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const stationId = localStorage.getItem("selectedStationId");
     const userId = localStorage.getItem("userId");
 
-    // פונקציית עזר חלופית ל-alert המציגה באנר מעוצב באתר
     function showMessage(text, isSuccess = false) {
         if (!messageBanner) return;
         messageBanner.textContent = text;
@@ -41,7 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
         dateInput.min = today;
     }
 
-    // חיווי טעינה קטן בזמן משיכת פרטי המשתמש
     if (fullNameInput) fullNameInput.placeholder = "Loading user profile...";
 
     fetch(`${API_URL}/api/users/${userId}`)
@@ -161,7 +159,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // 🌟 מימוש מצב טעינה (Loading State) לפני הפנייה לשרת
         submitBtn.disabled = true;
         submitBtn.textContent = "Booking your spot... ⏳";
         if (messageBanner) messageBanner.classList.add("hidden");
@@ -194,7 +191,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const mainContent = document.querySelector(".main-content");
 
-                // עיצוב נקי ללא הזרקת מאפייני style="" ישירים בקוד
                 mainContent.innerHTML = `
                     <div class="welcome-section confirmation-card">
                         <h1>🎉 Reservation Confirmed!</h1>

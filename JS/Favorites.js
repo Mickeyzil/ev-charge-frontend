@@ -37,7 +37,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    // דרישה 1: הזרקת מצב טעינה גלובלי (Spinner) מתוך ה-CSS הגלובלי
     container.innerHTML = `
         <div class="status-message-container loading-state">
             <div class="spinner"></div>
@@ -55,7 +54,6 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(stations => {
             container.innerHTML = "";
 
-            // דרישה 2: חיווי מעוצב ומקצועי למצב שבו אין עדיין מועדפים
             if (!stations || stations.length === 0) {
                 container.innerHTML = `
                     <div class="status-message-container no-data-state">
@@ -72,7 +70,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 let connectors = [];
                 let amenities = [];
 
-                // שימור מלא של הלוגיקה המקורית שלך לפירוק המערכים מהדאטהבייס
                 try {
                     if (typeof station.connectors === "string") {
                         if (station.connectors.trim().startsWith("[")) {
@@ -115,7 +112,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     .map(amenity => `<span class="tag-item">${amenity}</span>`)
                     .join("");
 
-                // שימוש בשמות המשתנים המקוריים והנכונים שלכם מהשרת וה-DB
                 const availableSlots = station.available_slots !== undefined
                     ? parseInt(station.available_slots)
                     : 0;
@@ -133,7 +129,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     statusColor = "#00B050";
                 }
 
-                // בניית מבנה הכרטיסייה
                 card.innerHTML = `
                     <div class="station-card-header">
                         <h2 class="station-card-title">${station.name || "Unknown Station"}</h2>
@@ -190,7 +185,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     reserveBtn.addEventListener("click", () => {
                         if (isFull) {
                             messageBox.textContent = `${station.name} is fully booked. Please choose another station.`;
-                            messageBox.className = "station-message error-msg"; // שימוש בקלאס גלובלי נקי
+                            messageBox.className = "station-message error-msg"; 
                             messageBox.classList.remove("hidden");
                             return;
                         }
@@ -221,7 +216,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         .then(() => {
                             card.remove();
 
-                            // אם הסרנו את התחנה האחרונה, נחזיר את חיווי ה-Empty State המעוצב
                             if (container.children.length === 0) {
                                 container.innerHTML = `
                                     <div class="status-message-container no-data-state">
@@ -233,7 +227,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         .catch(error => {
                             console.error("Error removing favorite:", error);
                             messageBox.textContent = "Failed to remove station from favorites.";
-                            messageBox.className = "station-message error-msg"; // שימוש בקלאס גלובלי נקי
+                            messageBox.className = "station-message error-msg"; 
                             messageBox.classList.remove("hidden");
                         });
                     });
@@ -244,7 +238,6 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch(error => {
             console.error("Error loading favorite stations:", error);
-            // דרישה 3: חיווי שגיאה גלובלי ומעוצב במקרה של שרת/DB כבויים
             container.innerHTML = `
                 <div class="status-message-container error-state">
                     <p>⚠️ Connection Error</p>

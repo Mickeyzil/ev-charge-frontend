@@ -1,5 +1,3 @@
-/* ===== Map View Page ===== */
-
 .map-page {
   max-width: 900px;
 }
@@ -21,7 +19,6 @@
   margin: 0;
 }
 
-/* Filter panel */
 .map-panel {
   background-color: #ffffff;
   border-radius: 26px;
@@ -79,7 +76,6 @@
   background-color: #ffffff;
 }
 
-/* Layout */
 .map-layout {
   display: grid;
   grid-template-columns: 1.55fr 0.9fr;
@@ -87,7 +83,6 @@
   align-items: stretch;
 }
 
-/* Map */
 .map-area {
   position: relative;
   min-height: 390px;
@@ -101,7 +96,6 @@
   box-shadow: 0 10px 22px rgba(0, 0, 0, 0.10);
 }
 
-/* Israel shape */
 .map-area::before {
   content: "";
   position: absolute;
@@ -116,7 +110,6 @@
   z-index: 1;
 }
 
-/* Main road */
 .map-area::after {
   content: "";
   position: absolute;
@@ -161,7 +154,6 @@
   transform: rotate(70deg);
 }
 
-/* Markers */
 .map-marker {
   position: absolute;
   width: 46px;
@@ -197,7 +189,6 @@
   display: none;
 }
 
-/* Marker positions like Israel */
 .marker-haifa {
   top: 18%;
   left: 44%;
@@ -223,7 +214,6 @@
   left: 52%;
 }
 
-/* Info card */
 .map-info-card {
   background-color: #ffffff;
   border-radius: 28px;
@@ -281,7 +271,6 @@
   cursor: not-allowed;
 }
 
-/* Mobile */
 @media (max-width: 700px) {
   .map-page {
     max-width: 393px;
@@ -337,11 +326,10 @@
   background-color: #D32F2F;
 }
 
-/* ===== Favorite Button Styling ===== */
 .map-favorite-btn {
   width: 100%;
   margin-top: 10px;
-  border: 2px solid #2170FF; /* משתמש בצבע הכחול הראשי של המערכת */
+  border: 2px solid #2170FF; 
   border-radius: 14px;
   padding: 13px;
   background-color: transparent;
@@ -353,10 +341,9 @@
 
 .map-favorite-btn:hover {
   background-color: #2170FF;
-  color: #ffffff; /* הופך את הרקע לכחול והטקסט ללבן בריחופו של העכבר */
+  color: #ffffff; 
 }
 
-/* התאמה למצב חשוך במידה ויש ברקע */
 .dark-mode .map-favorite-btn {
   border-color: #4a8eff;
   color: #4a8eff;
@@ -367,11 +354,10 @@
   color: #ffffff;
 }
 
-/* כשהתחנה כבר נמצאת במועדפים */
 .map-favorite-btn.active {
-  background-color: #FFD700; /* צבע זהב/צהוב יפה */
+  background-color: #FFD700; 
   border-color: #E6B800;
-  color: #000000; /* טקסט שחור קריא על רקע צהוב */
+  color: #000000; 
 }
 
 .map-favorite-btn.active:hover {
@@ -379,7 +365,6 @@
   color: #000000;
 }
 
-/* ===== Global Status & Message Styles (Shenkar UX Standards) ===== */
 .status-message-container {
   display: flex;
   flex-direction: column;
@@ -412,7 +397,6 @@
   font-weight: normal;
 }
 
-/* Spinner Animation */
 .spinner {
   width: 40px;
   height: 40px;
@@ -428,7 +412,6 @@
   100% { transform: rotate(360deg); }
 }
 
-/* Action item messages */
 .station-message {
   font-size: 0.9em;
   margin: 15px 0;

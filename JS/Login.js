@@ -54,7 +54,16 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // שליחת נתוני התחברות לשרת ובדיקה מול ה-Database
+        const spinner = document.getElementById("loading-spinner");
+        const submitBtn = loginForm.querySelector(".submit-btn");
+
+        if (spinner) spinner.classList.remove("hidden");
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = "0.6";
+            submitBtn.innerText = "Connecting...";
+        }
+
         fetch(`${API_URL}/api/users/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -69,13 +78,11 @@ document.addEventListener("DOMContentLoaded", () => {
             return response.json();
         })
         .then(data => {
-            // בדיקה חסינה אם ההתחברות הצליחה
             if ((data.message && data.message.includes('Login successful')) || data.user) {
                 
                 if (data.user) {
                     localStorage.setItem("userFullName", data.user.full_name || "Driver");
                     
-                    // 🔥 תיקון קריטי: בודקים אם חזר id או user_id כדי למנוע שמירה של undefined
                     const actualId = data.user.id || data.user.user_id;
                     if (actualId) {
                         localStorage.setItem("userId", actualId);
@@ -88,14 +95,25 @@ document.addEventListener("DOMContentLoaded", () => {
                     localStorage.setItem("userId", "2"); 
                 }
 
-                // מעבר בטוח לעמוד הראשי
                 window.location.href = "MainMenu.html";
             } else {
+                if (spinner) spinner.classList.add("hidden");
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = "1";
+                    submitBtn.innerText = "Log In";
+                }
                 errorBox.innerHTML = data.message || "Login failed";
                 errorBox.classList.remove("hidden");
             }
         })
         .catch(err => {
+            if (spinner) spinner.classList.add("hidden");
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.style.opacity = "1";
+                submitBtn.innerText = "Log In";
+            }
             console.error('Error during login fetch:', err);
             errorBox.innerHTML = err.message || "Server error, please try again.";
             errorBox.classList.remove("hidden");

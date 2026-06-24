@@ -4,7 +4,6 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.classList.add("dark-mode");
     }
 
-    // 🔥 הצגת השם המלא של המשתמש מתוך ה-localStorage
     const storedName = localStorage.getItem("userFullName");
     const welcomeHeading = document.getElementById("welcome-message");
     if (welcomeHeading && storedName) {
@@ -74,7 +73,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (logoutConfirmBtn) {
         logoutConfirmBtn.addEventListener("click", () => {
-            // 🔥 מחיקת השם מהדפדפן בעת התנתקות
             localStorage.removeItem("userFullName");
             localStorage.removeItem("userId");
             window.location.href = "Login.html";

@@ -7,7 +7,7 @@
 
     <link rel="stylesheet" href="./CSS/Global.css">
     <link rel="stylesheet" href="./CSS/Login.css">
-<script src="./JS/config.js"></script>
+    <script src="./JS/config.js"></script>
     <script src="./JS/Login.js" defer></script>
 </head>
 
@@ -48,8 +48,14 @@
             </div>
 
             <button type="submit" class="submit-btn">Log In</button>
-       <button type="button" class="signup-link-btn" id="signup-btn">
-        Create New Account</button>
+
+            <div id="loading-spinner" class="spinner-container hidden">
+                <div class="loading-text">Connecting to server, please wait... ⚡</div>
+                <div class="spinner"></div>
+            </div>
+
+            <button type="button" class="signup-link-btn" id="signup-btn">
+                Create New Account</button>
         </form>
     </main>
 
