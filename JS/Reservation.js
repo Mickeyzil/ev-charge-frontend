@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!userId || userId === "undefined" || userId === "null") {
         showMessage("Please log in before making a reservation. Redirecting...");
         setTimeout(() => {
-            window.location.href = "Login.html";
+            window.location.href = "index.html";
         }, 3000);
         return;
     }
@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("Error loading user data:", error);
             showMessage("Failed to load user details. Please login again.");
             setTimeout(() => {
-                window.location.href = "Login.html";
+                window.location.href = "index.html";
             }, 3000);
         });
 

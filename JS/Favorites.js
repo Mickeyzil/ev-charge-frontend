@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (!userId || userId === "undefined" || userId === "null") {
-        window.location.href = "Login.html";
+        window.location.href = "index.html";
         return;
     }
 

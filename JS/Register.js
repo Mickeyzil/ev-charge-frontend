@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (backLoginBtn) {
         backLoginBtn.addEventListener("click", () => {
-            window.location.href = "Login.html";
+            window.location.href = "index.html";
         });
     }
 
@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (data.message && data.message.includes('successfully')) {
                     showMessage("Account created successfully! Redirecting to login...", "success");
                     setTimeout(() => {
-                        window.location.href = "Login.html";
+                        window.location.href = "index.html";
                     }, 1200);
                 } else {
                     if (spinner) spinner.classList.add("hidden");

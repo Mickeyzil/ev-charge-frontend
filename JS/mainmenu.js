@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
         logoutConfirmBtn.addEventListener("click", () => {
             localStorage.removeItem("userFullName");
             localStorage.removeItem("userId");
-            window.location.href = "Login.html";
+            window.location.href = "index.html";
         });
     }
 });
