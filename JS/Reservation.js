@@ -69,22 +69,25 @@ document.addEventListener("DOMContentLoaded", () => {
         const comingFrom = localStorage.getItem("comingFrom");
 
         if (comingFrom === "Favorites.html") {
-            backBtn.innerHTML = "&#9664; Back to favorites";
-        } else if (comingFrom === "MapView.html") {
+            backBtn.innerHTML = "&#9664; Back to Favorites";
+        } else if (comingFrom === "MapView.html" || comingFrom === "map") {
             backBtn.innerHTML = "&#9664; Back to Map View";
         } else {
             backBtn.innerHTML = "&#9664; Back to Nearby Stations";
         }
 
         backBtn.addEventListener("click", () => {
-            if (comingFrom === "Favorites.html") {
+            const currentComingFrom = localStorage.getItem("comingFrom");
+
+            if (currentComingFrom === "Favorites.html") {
                 localStorage.removeItem("comingFrom");
-                window.location.href = "Favorites.html";
-            } else if (comingFrom === "MapView.html") {
+                window.location.href = "./Favorites.html";
+            } else if (currentComingFrom === "MapView.html" || currentComingFrom === "map") {
                 localStorage.removeItem("comingFrom");
-                window.location.href = "MapView.html";
+                window.location.href = "./MapView.html";
             } else {
-                window.location.href = "NearbyStations.html";
+                localStorage.removeItem("comingFrom");
+                window.location.href = "./NearbyStations.html";
             }
         });
     }
