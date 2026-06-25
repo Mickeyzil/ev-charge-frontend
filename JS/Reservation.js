@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (comingFrom === "Favorites.html") {
             backBtn.innerHTML = "&#9664; Back to favorites";
-        } else if (comingFrom === "map") {
+        } else if (comingFrom === "MapView.html") {
             backBtn.innerHTML = "&#9664; Back to Map View";
         } else {
             backBtn.innerHTML = "&#9664; Back to Nearby Stations";
