@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (comingFrom === "Favorites.html") {
                 localStorage.removeItem("comingFrom");
                 window.location.href = "Favorites.html";
-            } else if (comingFrom === "map") {
+            } else if (comingFrom === "MapView.html") {
                 localStorage.removeItem("comingFrom");
                 window.location.href = "MapView.html";
             } else {
