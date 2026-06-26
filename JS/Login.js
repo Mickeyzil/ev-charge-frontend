@@ -32,14 +32,14 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 5. טיפול בטופס ההתחברות (עטוף ב-if בטוח כדי למנוע חסימת קוד)
+    // 5. טיפול בטופס ההתחברות
     const loginForm = document.getElementById("login-form");
     
     if (loginForm) {
         loginForm.addEventListener("submit", (event) => {
             event.preventDefault();
 
-            // חילוץ האלמנטים בצורה נכונה
+            // חילוץ האלמנטים מה-DOM
             const errorBox = document.getElementById("error-message");
             const email = document.getElementById("email").value.trim();
             const password = document.getElementById("password").value.trim();
@@ -52,6 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 
+            // ולדידציה בסיסית לפני שליחה
             if (email === "" || password === "") {
                 if (errorBox) {
                     errorBox.innerHTML = "Please fill all fields";
@@ -78,6 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const submitBtn = loginForm.querySelector("button[type='submit']");
 
+            // הפעלת מצב טעינה (Spinner) ונעילת כפתור השליחה
             if (spinner) spinner.classList.remove("hidden");
             if (submitBtn) {
                 submitBtn.disabled = true;
@@ -93,44 +95,43 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
                 body: JSON.stringify({ email, password })
             })
-            .then(res => res.json())
-            .then(data => {
-                // בדיקה מורחבת: תפיסת טוקן או תפיסת הודעת ההצלחה הטקסטואלית מהשרת
-                if (data.token || data.accessToken || data.message === "Login successful!") {
-                    
-                    // שמירת הטוקן במידה והוא קיים בתוך ה-Response
-                    const token = data.token || data.accessToken;
-                    if (token) {
-                        localStorage.setItem("token", token);
-                    }
-                    
-                    // שמירת נתוני המשתמש
-                    if (data.user) {
-                        localStorage.setItem("userFullName", data.user.full_name || "Driver");
-                        localStorage.setItem("userId", data.user.user_id);
-                    } else {
-                        localStorage.setItem("userFullName", "Driver");
-                        localStorage.setItem("userId", "2"); 
-                    }
+            .then(res => {
+                // בדיקה על פי סטטוס ה-HTTP (אם הסטטוס הוא 200-299)
+                if (res.ok) {
+                    // הגדרת ערכי ברירת מחדל ל-Local Storage ליתר ביטחון
+                    localStorage.setItem("userFullName", "Driver");
+                    localStorage.setItem("userId", "2");
 
-                    // מעבר מוצלח לעמוד הבא!
-                    window.location.href = "MainMenu.html";
+                    // ננסה לחלץ נתונים מה-JSON, אך נעביר עמוד בכל מקרה
+                    return res.json()
+                        .then(data => {
+                            if (data && data.token) {
+                                localStorage.setItem("token", data.token);
+                            }
+                            if (data && data.user) {
+                                localStorage.setItem("userFullName", data.user.full_name || "Driver");
+                                localStorage.setItem("userId", data.user.user_id);
+                            }
+                            // מעבר לעמוד הראשי בעקבות סטטוס מוצלח
+                            window.location.href = "MainMenu.html";
+                        })
+                        .catch(() => {
+                            // אם השרת מחזיר טקסט רגיל ולא JSON תקני - עדיין נעביר עמוד כי הסטטוס הוא ok
+                            window.location.href = "MainMenu.html";
+                        });
                 } else {
-                    // במקרה של כישלון אמיתי בהתחברות
-                    if (spinner) spinner.classList.add("hidden");
-                    if (submitBtn) {
-                        submitBtn.disabled = false;
-                        submitBtn.style.opacity = "1";
-                        submitBtn.innerText = "Log In";
-                    }
-                    if (errorBox) {
-                        errorBox.innerHTML = data.message || "Login failed";
-                        errorBox.classList.remove("hidden");
-                    }
+                    // אם השרת החזיר סטטוס שגיאה (כגון 400, 401, 500)
+                    return res.json()
+                        .then(data => {
+                            throw new Error(data.message || "Login failed");
+                        })
+                        .catch(err => {
+                            throw new Error(err.message || "Login failed");
+                        });
                 }
             })
             .catch(err => {
-                // במקרה של שגיאת תקשורת/שרת נופל
+                // החזרת האלמנטים למצב רגיל במקרה של שגיאה
                 if (spinner) spinner.classList.add("hidden");
                 if (submitBtn) {
                     submitBtn.disabled = false;
@@ -139,7 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 console.error('Error during login fetch:', err);
                 if (errorBox) {
-                    errorBox.innerHTML = "Server error, please try again.";
+                    errorBox.innerHTML = err.message || "Server error, please try again.";
                     errorBox.classList.remove("hidden");
                 }
             });
