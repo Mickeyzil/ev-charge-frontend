@@ -43,8 +43,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const errorBox = document.getElementById("error-message");
             const email = document.getElementById("email").value.trim();
             const password = document.getElementById("password").value.trim();
-            
-            // תיקון ה-ID: ב-HTML שלכם מופיע "loading-spinner" ולא "spinner"!
             const spinner = document.getElementById("loading-spinner"); 
 
             if (errorBox) {
@@ -87,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 submitBtn.innerText = "Logging in...";
             }
 
-            // ביצוע ה-Fetch לשרת
+            // ביצוע ה-Fetch לשרת ב-Render
             fetch(`${API_URL}/api/users/login`, {
                 method: "POST",
                 headers: {
@@ -97,9 +95,16 @@ document.addEventListener("DOMContentLoaded", () => {
             })
             .then(res => res.json())
             .then(data => {
-                if (data.token) {
-                    localStorage.setItem("token", data.token);
+                // בדיקה מורחבת: תפיסת טוקן או תפיסת הודעת ההצלחה הטקסטואלית מהשרת
+                if (data.token || data.accessToken || data.message === "Login successful!") {
                     
+                    // שמירת הטוקן במידה והוא קיים בתוך ה-Response
+                    const token = data.token || data.accessToken;
+                    if (token) {
+                        localStorage.setItem("token", token);
+                    }
+                    
+                    // שמירת נתוני המשתמש
                     if (data.user) {
                         localStorage.setItem("userFullName", data.user.full_name || "Driver");
                         localStorage.setItem("userId", data.user.user_id);
@@ -108,8 +113,10 @@ document.addEventListener("DOMContentLoaded", () => {
                         localStorage.setItem("userId", "2"); 
                     }
 
+                    // מעבר מוצלח לעמוד הבא!
                     window.location.href = "MainMenu.html";
                 } else {
+                    // במקרה של כישלון אמיתי בהתחברות
                     if (spinner) spinner.classList.add("hidden");
                     if (submitBtn) {
                         submitBtn.disabled = false;
@@ -123,6 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             })
             .catch(err => {
+                // במקרה של שגיאת תקשורת/שרת נופל
                 if (spinner) spinner.classList.add("hidden");
                 if (submitBtn) {
                     submitBtn.disabled = false;
