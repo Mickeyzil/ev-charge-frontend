@@ -404,3 +404,21 @@ body.dark-mode #logout-cancel-btn {
   color: #D32F2F;
   border: 1px solid #D32F2F;
 }
+body {
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+body.page-loaded {
+  opacity: 1;
+}
+
+.logo-container {
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.logo-container:hover {
+  transform: scale(1.04);
+  opacity: 0.85;
+}
