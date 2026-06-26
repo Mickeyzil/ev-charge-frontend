@@ -9,89 +9,28 @@
     margin-bottom: 20px;
 }
 
-.top-blue-container {
-    background-color: #0052FF;
-    border-bottom-left-radius: 40px;
-    border-bottom-right-radius: 40px;
-    max-width: 600px;
-    margin: 0 auto;
-    padding-bottom: 0;
-}
-
-.top-blue-container .main-header,
-.top-blue-container .welcome-section {
-    background-color: transparent;
-    margin: 0;
-}
-
-.top-blue-container .logo,
-.top-blue-container .nav-icons .icon {
-    color: #ffffff;
-}
-
-.nav-icons {
-    display: flex;
-    gap: 22px;
-    align-items: center;
-}
-
-.icon {
-    background: none;
-    border: none;
-    color: white;
-    font: inherit;
-    font-size: 20px;
-    font-weight: 600;
-    cursor: pointer;
-    padding: 0;
-}
-
-.icon:hover {
-    opacity: 0.85;
-}
-
-.top-blue-container .welcome-section {
-    background-color: #ffffff;
-    margin: 0;
-    padding: 45px 25px;
-    border-top-left-radius: 30px;
-    border-top-right-radius: 30px;
-    text-align: center;
-}
-
-.top-blue-container .welcome-section h1 {
-    color: #1A365D;
-    font-size: 36px;
-    margin-bottom: 10px;
-}
-
-.top-blue-container .welcome-section p {
-    color: #7d9bc4;
-    font-size: 20px;
-    font-weight: 600;
-}
-
 .booking-form {
     max-width: 520px;
-    margin: 50px auto;
+    margin: 30px auto;
 }
 
 .submit-btn {
     cursor: pointer;
 }
+
 .signup-link-btn {
-  background: transparent;
-  border: none;
-  color: #1A365D;
-  font-size: 1.05em;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 18px;
-  text-decoration: underline;
+    background: transparent;
+    border: none;
+    color: #1A365D;
+    font-size: 1.05em;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 18px;
+    text-decoration: underline;
 }
 
 .signup-link-btn:hover {
-  color: #2170FF;
+    color: #2170FF;
 }
 
 .spinner-container {
@@ -114,16 +53,59 @@
     width: 40px;
     height: 40px;
     border: 4px solid #E2E8F0;
-    border-top: 4px solid #0052FF; /* כחול זהה ללוגו שלכם */
+    border-top: 4px solid #0052FF;
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
 .hidden {
     display: none !important;
+}
+.login-page {
+    background-color: #A3D9FF !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.login-page .main-content {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    max-width: 600px !important;
+    margin: 0 auto !important;
+    padding: 30px 20px 40px !important;
+    min-height: auto !important;
+    position: relative !important;
+    z-index: 10 !important;
+}
+
+.login-page .welcome-section {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    text-align: center !important;
+    color: #1A365D !important;
+    margin-bottom: 25px !important;
+}
+
+.login-page #login-form {
+    display: flex !important;
+    flex-direction: column !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    max-width: 520px !important;
+    margin: 30px auto !important;
+    gap: 28px !important;
+    position: relative !important;
+    z-index: 20 !important;
+}
+
+.login-page .form-group,
+.login-page .form-group label,
+.login-page .form-group input,
+.login-page .submit-btn,
+.login-page .signup-link-btn {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
 }
