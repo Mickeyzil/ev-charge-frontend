@@ -109,3 +109,20 @@
     opacity: 1 !important;
     visibility: visible !important;
 }
+.login-page .icon {
+    background: none;
+    border: none;
+    color: #1A365D;
+    font: inherit;
+    font-size: 1.1em;
+    cursor: pointer;
+    padding: 0;
+}
+
+.login-page .icon:hover {
+    color: #2170FF;
+}
+
+.login-page .logo-container {
+    cursor: default;
+}
