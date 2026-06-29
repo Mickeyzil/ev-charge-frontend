@@ -13,9 +13,9 @@
     max-width: 520px;
     margin: 30px auto;
     margin: 50px auto;
-    background-color: #ffffff; /* 🔥 שינוי משקוף ללבן כדי שהטופס יבלוט! */
-    padding: 30px;             /* הוספת מרווח פנימי יפה לשדות */
-    border-radius: 20px;       /* עיגול פינות שיתאים לעיצוב הכללי */
+    background-color: #ffffff; 
+    padding: 30px;             
+    border-radius: 20px;       
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); 
 }
 

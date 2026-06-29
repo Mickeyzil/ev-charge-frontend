@@ -1,14 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    // 1. הגדרת ה-API_URL בצורה גלובלית ובטוחה מול config.js
     const API_URL = window.API_URL || "https://ev-charge-backend-27a3.onrender.com";
 
-    // 2. טיפול ב-Dark Mode
     if (localStorage.getItem("darkMode") === "true") {
         document.body.classList.add("dark-mode");
     }
 
-    // 3. ניווט לכפתורי תפריט צדדיים
     const contactBtn = document.getElementById("contact-btn");
     const settingsBtn = document.getElementById("settings-btn");
 
@@ -24,7 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 4. טיפול בכפתור הרשמה
     const signupBtn = document.getElementById("signup-btn");
     if (signupBtn) {
         signupBtn.addEventListener("click", () => {
@@ -32,14 +28,12 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 5. טיפול בטופס ההתחברות
     const loginForm = document.getElementById("login-form");
     
     if (loginForm) {
         loginForm.addEventListener("submit", (event) => {
             event.preventDefault();
 
-            // חילוץ האלמנטים מה-DOM
             const errorBox = document.getElementById("error-message");
             const email = document.getElementById("email").value.trim();
             const password = document.getElementById("password").value.trim();
@@ -52,7 +46,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 
-            // ולדידציה בסיסית לפני שליחה
             if (email === "" || password === "") {
                 if (errorBox) {
                     errorBox.innerHTML = "Please fill all fields";
@@ -79,7 +72,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const submitBtn = loginForm.querySelector("button[type='submit']");
 
-            // הפעלת מצב טעינה (Spinner) ונעילת כפתור השליחה
             if (spinner) spinner.classList.remove("hidden");
             if (submitBtn) {
                 submitBtn.disabled = true;
@@ -87,7 +79,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 submitBtn.innerText = "Logging in...";
             }
 
-            // ביצוע ה-Fetch לשרת ב-Render
             fetch(`${API_URL}/api/users/login`, {
                 method: "POST",
                 headers: {
@@ -96,13 +87,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 body: JSON.stringify({ email, password })
             })
             .then(res => {
-                // בדיקה על פי סטטוס ה-HTTP (אם הסטטוס הוא 200-299)
                 if (res.ok) {
-                    // הגדרת ערכי ברירת מחדל ל-Local Storage ליתר ביטחון
                     localStorage.setItem("userFullName", "Driver");
                     localStorage.setItem("userId", "2");
 
-                    // ננסה לחלץ נתונים מה-JSON, אך נעביר עמוד בכל מקרה
                     return res.json()
                         .then(data => {
                             if (data && data.token) {
@@ -112,15 +100,12 @@ document.addEventListener("DOMContentLoaded", () => {
                                 localStorage.setItem("userFullName", data.user.full_name || "Driver");
                                 localStorage.setItem("userId", data.user.user_id);
                             }
-                            // מעבר לעמוד הראשי בעקבות סטטוס מוצלח
                             window.location.href = "MainMenu.html";
                         })
                         .catch(() => {
-                            // אם השרת מחזיר טקסט רגיל ולא JSON תקני - עדיין נעביר עמוד כי הסטטוס הוא ok
                             window.location.href = "MainMenu.html";
                         });
                 } else {
-                    // אם השרת החזיר סטטוס שגיאה (כגון 400, 401, 500)
                     return res.json()
                         .then(data => {
                             throw new Error(data.message || "Login failed");
@@ -131,7 +116,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             })
             .catch(err => {
-                // החזרת האלמנטים למצב רגיל במקרה של שגיאה
                 if (spinner) spinner.classList.add("hidden");
                 if (submitBtn) {
                     submitBtn.disabled = false;

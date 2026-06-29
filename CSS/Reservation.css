@@ -1,6 +1,4 @@
-/* Reservation Page */
 
-/* Message banner */
 .message-banner {
     max-width: 520px;
     margin: 20px auto 30px;
@@ -25,7 +23,6 @@
     border: 2px solid #2E7D32;
 }
 
-/* Form polish */
 #reservation-form {
     max-width: 520px;
     margin: 30px auto;
@@ -62,7 +59,6 @@
     box-shadow: none;
 }
 
-/* Success screen */
 .confirmation-card {
     max-width: 600px;
     margin: 40px auto;
@@ -141,7 +137,6 @@
     transform: scale(0.98);
 }
 
-/* Animation */
 @keyframes fadeMessage {
     from {
         opacity: 0;
